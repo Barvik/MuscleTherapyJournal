@@ -1,0 +1,266 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Treatment", "Treatment"))
+{
+    <h2>Hei</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <button title="Undo" type="button" id="undoButton"><img src="/Images/Undo-icon.png" class="canvas-toolbar" /></button>
+            <button title="Redo" type="button" id="redoButton"><img src="/Images/Redo-icon.png" class="canvas-toolbar" /></button>
+            <button title="Lite kryss" type="button" id="smallCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-small" /></button>
+            <button title="Stort kryss" type="button" id="largeCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-large" /></button>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-6">
+            <canvas id="treatmentCanvas" width="2140" height="2316"></canvas>
+        </div>
+    </div>
+
+}
+
+
+<script type="text/javascript">
+    var imageUrl
+        = "<%: Url.Action('GetBase64Image', 'Image') %>";
+    var imageUrl = '@Url.Action("GetBase64Image", "Image")';
+    var imgs = null;
+    var drawnCrosses = [];
+    var removedCrosses = [];
+    var leftButtonClick, rightButtonClick;
+    leftButtonClick =  0;
+    rightButtonClick = 2;
+
+    var ButtonTypeEnum = {
+        NOTSET: { name: "Notset", value: 0 },
+        SMALL: { name: "Small", value: 0 },
+        MEDIUM: { name: "Medium", value: 4 },
+        LARGE: { name: "Large", value: 6 },
+    }
+
+    var undoButton = $('#undoButton');
+    var redoButton = $('#redoButton');
+    var smallCrossButton = $('#smallCrossButton');
+    var largeCrossButton = $('#largeCrossButton');
+    var buttonType = ButtonTypeEnum.NOTSET;
+
+    smallCrossButton.click(function () {
+        buttonType = ButtonTypeEnum.MEDIUM;
+    });
+
+    largeCrossButton.click(function () {
+        buttonType = ButtonTypeEnum.LARGE;
+    });
+
+    var canvas = document.getElementById('treatmentCanvas'),
+    context = canvas.getContext('2d');
+    canvas.addEventListener("mousedown", doMouseDown, false);
+
+    canvas.oncontextmenu = function (e) {
+        e.preventDefault();
+    };
+
+    canvas.onselectstart = function() {
+         return false;
+    }
+
+    $(document).ready(function () {
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: imageUrl,
+            contentType: 'application/json',
+            dataType: "json",
+            success: function (data) {
+                imgs = data;
+                setCanvasImage(imgs.base64imgage);
+            },
+            error: function (xhr) {
+                alert("Error occurred while loading the image. "
+                    + xhr.responseText);
+            }
+        });
+    });
+
+    var setCanvasImage = function (base64Data) {
+        var base_image = new Image();
+        var img = "data:image/jpg;base64,"
+                 + base64Data;
+
+        base_image.src = img;
+
+        resizeCanvasImage(base_image, canvas, 800, 400);
+    };
+
+    function resizeCanvasImage(img, canvas, maxWidth, maxHeight) {
+        var imgWidth = img.width,
+            imgHeight = img.height;
+
+        var ratio = 1, ratio1 = 1, ratio2 = 1;
+        ratio1 = maxWidth / imgWidth;
+        ratio2 = maxHeight / imgHeight;
+
+        if (ratio1 < ratio2) {
+            ratio = ratio1;
+        }
+        else {
+            ratio = ratio2;
+        }
+
+        var canvasContext = canvas.getContext("2d");
+        var canvasCopy = document.createElement("canvas");
+        var copyContext = canvasCopy.getContext("2d");
+        var canvasCopy2 = document.createElement("canvas");
+        var copyContext2 = canvasCopy2.getContext("2d");
+        canvasCopy.width = imgWidth;
+        canvasCopy.height = imgHeight;
+        copyContext.drawImage(img, 0, 0);
+
+        canvasCopy2.width = imgWidth;
+        canvasCopy2.height = imgHeight;
+        copyContext2.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvasCopy2.width, canvasCopy2.height);
+
+
+        var rounds = 2;
+        var roundRatio = ratio * rounds;
+        for (var i = 1; i <= rounds; i++) {
+
+            canvasCopy.width = imgWidth * roundRatio / i;
+            canvasCopy.height = imgHeight * roundRatio / i;
+
+            copyContext.drawImage(canvasCopy2, 0, 0, canvasCopy2.width, canvasCopy2.height, 0, 0, canvasCopy.width, canvasCopy.height);
+
+            canvasCopy2.width = imgWidth * roundRatio / i;
+            canvasCopy2.height = imgHeight * roundRatio / i;
+            copyContext2.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvasCopy2.width, canvasCopy2.height);
+
+        } 
+
+        canvas.width = imgWidth * roundRatio / rounds;
+        canvas.height = imgHeight * roundRatio / rounds;
+        canvasContext.drawImage(canvasCopy2, 0, 0, canvasCopy2.width, canvasCopy2.height, 0, 0, canvas.width, canvas.height);
+    }
+
+    function doMouseDown(event) {
+        if (event.button === rightButtonClick) {
+            doMouseRightClick(event);
+        }
+        else if (event.button === leftButtonClick) {
+            doMouseLeftClick(event);
+        }
+    }
+
+    function doMouseRightClick(event) {
+        var pos = getMousePos(canvas, event);
+        var radius = 5;
+        var eraseCross;
+        var eraseIndexCross = -1;
+
+        if (drawnCrosses.length > 0) {
+            var index;
+            for (index = 0; index < drawnCrosses.length; ++index) {
+                var result = pointInCircle(drawnCrosses[index].pos.x, drawnCrosses[index].pos.y, pos.x, pos.y, radius);
+
+                if (result) {
+                    eraseCross = drawnCrosses[index];
+                    eraseIndexCross = index;
+                }
+            }
+        }
+        
+        if (typeof eraseCross !== 'undefined') {
+            drawnCrosses.splice(eraseIndexCross, 1);
+            removedCrosses.push(eraseCross);
+
+            reDrawImageWithRemainingCrosses();
+        };
+    }
+
+    function pointInCircle(x, y, cx, cy, radius) {
+        var distancesquared = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+        return distancesquared <= radius * radius;
+    }
+
+    function doMouseLeftClick(event) {
+        var pos = getMousePos(canvas, event);
+        var x = pos.x;
+        var y = pos.y;
+        var drawImage = true;
+        var index;
+        for (index = 0; index < drawnCrosses.length; index++) {
+            if (drawnCrosses[index].pos.x == x && drawnCrosses[index].pos.y == y) {
+                drawImage = false;
+            }
+        }
+
+        if (drawImage) {
+            drawCross(x, y,  buttonType);
+
+            var crossObject = { pos: pos, buttonType: buttonType };
+
+            drawnCrosses.push(crossObject);
+        }
+    }
+
+    function drawCross(x, y, buttonTypeEnum) {
+        context.beginPath();
+        
+
+        context.moveTo(x - buttonTypeEnum.value, y - buttonTypeEnum.value);
+        context.lineTo(x + buttonTypeEnum.value, y + buttonTypeEnum.value);
+
+        context.moveTo(x + buttonTypeEnum.value, y - buttonTypeEnum.value);
+        context.lineTo(x - buttonTypeEnum.value, y + buttonTypeEnum.value);
+
+        //context.moveTo(x - 4, y - 4);
+        //context.lineTo(x + 4, y + 4);
+
+        //context.moveTo(x + 4, y - 4);
+        //context.lineTo(x - 4, y + 4);
+        context.strokeStyle = "rgb(0,0,255)";
+        context.stroke();
+    }
+
+    undoButton.click( function() {
+        if (drawnCrosses.length != 0) {
+            var undoCross = drawnCrosses.pop();
+            removedCrosses.push(undoCross);
+
+            reDrawImageWithRemainingCrosses();
+        }
+    });
+
+    redoButton.click(function() {
+        if (removedCrosses.length != 0) {
+
+            var redoCross = removedCrosses.pop();
+            drawnCrosses.push(redoCross);
+
+            reDrawImageWithRemainingCrosses();
+        }
+    });
+
+    function reDrawImageWithRemainingCrosses() {
+        setCanvasImage(imgs.base64imgage);
+
+        var index;
+        for (index = 0; index < drawnCrosses.length; ++index) {
+            var pos = drawnCrosses[index].pos;
+            drawCross(pos.x, pos.y, drawnCrosses[index].buttonType);
+        }
+    }
+
+    function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+    }
+
+</script>
