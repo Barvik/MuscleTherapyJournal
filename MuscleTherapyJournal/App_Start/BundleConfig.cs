@@ -28,8 +28,11 @@ namespace MuscleTherapyJournal
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
+                      "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/appcss").Include(
                       "~/Content/treatment.css"));
+
         }
     }
 }

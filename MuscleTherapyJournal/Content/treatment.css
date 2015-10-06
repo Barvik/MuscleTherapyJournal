@@ -1,3 +1,4 @@
+@import url('http://getbootstrap.com/dist/css/bootstrap.css');
 #treatmentCanvas {
   cursor: pointer;
 }
@@ -16,4 +17,30 @@
 .canvas-toolbar-cross-large {
   height: 12px;
   width: 12px;
+}
+.textarea[type=text].newclass {
+  width: 200px;
+}
+.textarea {
+  font-family: Calibri;
+  min-width: 100%;
+  max-height: 150px;
+  min-height: 150px;
+  bottom: auto;
+}
+.myrow {
+  font-size: 0;
+}
+.myrow > * {
+  float: none;
+  display: inline-block;
+  font-size: 14px;
+  /* if using LESS it's quicker to just use @font-size-base */
+}
+.myrow > *:last-child {
+  vertical-align: bottom;
+}
+.myrow p:last-child {
+  margin-bottom: 0;
+  /* optional */
 }
