@@ -11,5 +11,13 @@ namespace MuscleTherapyJournal.Domain.Model
         public DateTime CreatedDate { get; set; }
         public int TreatmentId { get; set; }
 
+        public override string ToString()
+        {
+            return
+                string.Format(
+                    "AfflicationArea: [AfflictionAreaId: {0}, MouseXPosition: {1}, MouseYPosition: {2}, CrossSize: {3}" +
+                    "CreatedDate: {4}, TreatmentId: {5}]", AfflictionAreaId, MouseXPosition, MouseYPosition, CrossSize,
+                    CreatedDate, TreatmentId);
+        }
     }
 }

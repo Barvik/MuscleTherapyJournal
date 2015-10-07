@@ -4,6 +4,7 @@ namespace MuscleTherapyJournal.Core.Services.Interfaces
 {
     public interface ITreatmentService
     {
-        bool SaveTreatment(Treatment threatment);
+        bool SaveTreatment(Treatment treatment);
+        Treatment GetTreatmentById(int treatmentId);
     }
 }

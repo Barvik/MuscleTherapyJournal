@@ -34,6 +34,10 @@
       <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StructureMap, Version=3.1.6.186, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\structuremap.3.1.6.186\lib\net40\StructureMap.dll</HintPath>
       <Private>True</Private>
@@ -51,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factories\Interfaces\ITreatmentFactory.cs" />
+    <Compile Include="Factories\TreatmentFactory.cs" />
     <Compile Include="Infrastructure\Registries\CoreRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Interfaces\ITreatmentService.cs" />
@@ -63,6 +69,10 @@
     <ProjectReference Include="..\MuscleTherapyJournal.Domain\MuscleTherapyJournal.Domain.csproj">
       <Project>{2B30E945-8C7B-4BFB-ADD4-3172F7974DBB}</Project>
       <Name>MuscleTherapyJournal.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MuscleTherapyJournal.Persitance\MuscleTherapyJournal.Persistance.csproj">
+      <Project>{6E64561A-2062-47EE-8D47-A4F22CDA60E2}</Project>
+      <Name>MuscleTherapyJournal.Persistance</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

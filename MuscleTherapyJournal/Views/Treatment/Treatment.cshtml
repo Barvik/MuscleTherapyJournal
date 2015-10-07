@@ -1,10 +1,11 @@
-﻿@model MuscleTherapyJournal.Models.TreatmentViewModel
+﻿@using MuscleTherapyJournal.Domain.Model
+@model MuscleTherapyJournal.Models.TreatmentViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("Treatment", "Treatment"))
+@using (Html.BeginForm("Treatment", "Treatment", FormMethod.Post, new { id = "treatmentForm" }))
 {
     <div class="container">
         <h2>Hei</h2>
@@ -38,17 +39,26 @@
             </div>
             <div class="col-md-6 bottom-align-text">
                 @Html.TextAreaFor(model => model.Treatment.Observations, new
-            {
-                @name = "Lol",
-                @class = "form-control textarea",
-                @style = "font-family: Calibri; min-width: 100%; max-height: 150px; min-height: 150px;"
-            })
+                {
+                    @name = "Lol",
+                    @class = "form-control textarea",
+                    @style = "font-family: Calibri; min-width: 100%; max-height: 150px; min-height: 150px;"
+                })
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn-block">
+                    <span class="pull-right">
+                        <button class="btn btn-default">Avbryt</button>
+                        <input class="btn btn-primary" type="submit" id="saveTreatment" name="submitbutton1" value="Lagre Behandling" />
+                    </span>
+                </div>
             </div>
         </div>
     </div>
-    
 }
-
 
 <script type="text/javascript">
     var imageUrl
@@ -58,14 +68,45 @@
     var drawnCrosses = [];
     var removedCrosses = [];
     var leftButtonClick, rightButtonClick;
-    leftButtonClick =  0;
+    leftButtonClick = 0;
     rightButtonClick = 2;
 
+    $("#treatmentForm").submit(function (event) {
+        console.log("Handler for .submit() called.");
+        event.preventDefault();
+    });
+
+    $("#saveTreatment").click(function () {
+
+        var afflication = JSON.stringify(drawnCrosses);
+        var observations = JSON.stringify($("#Treatment_Observations").val().split('\n'));
+        var anamnesis = JSON.stringify($("#Treatment_Anamnesis").val().split('\n'));
+
+        console.log(afflication);
+
+        $.ajax({
+            type: "POST",
+            url: "/api/treatment/savetreatment/",
+            data: {
+                Afflication: afflication,
+                Observations: observations,
+                Anamnesis: anamnesis
+            }
+        })
+        .done(function (data) {
+            console.log("Sucess");
+            })
+        .fail(function (error) {
+            console.log("Noe gikk galt: ", error);
+        });
+
+    });
+
     var ButtonTypeEnum = {
-        NOTSET: { name: "Notset", value: 0 },
-        SMALL: { name: "Small", value: 0 },
-        MEDIUM: { name: "Medium", value: 4 },
-        LARGE: { name: "Large", value: 6 },
+        NOTSET: { name: "Notset", value: 0, enumValue: 0 },
+        SMALL: { name: "Small", value: 0, enumValue: 1 },
+        MEDIUM: { name: "Medium", value: 4, enumValue: 2 },
+        LARGE: { name: "Large", value: 6, enumValue: 3 },
     }
 
     var undoButton = $('#undoButton');
@@ -90,8 +131,8 @@
         e.preventDefault();
     };
 
-    canvas.onselectstart = function() {
-         return false;
+    canvas.onselectstart = function () {
+        return false;
     }
 
     $(document).ready(function () {
@@ -165,7 +206,7 @@
             canvasCopy2.height = imgHeight * roundRatio / i;
             copyContext2.drawImage(canvasCopy, 0, 0, canvasCopy.width, canvasCopy.height, 0, 0, canvasCopy2.width, canvasCopy2.height);
 
-        } 
+        }
 
         canvas.width = imgWidth * roundRatio / rounds;
         canvas.height = imgHeight * roundRatio / rounds;
@@ -190,7 +231,7 @@
         if (drawnCrosses.length > 0) {
             var index;
             for (index = 0; index < drawnCrosses.length; ++index) {
-                var result = pointInCircle(drawnCrosses[index].pos.x, drawnCrosses[index].pos.y, pos.x, pos.y, radius);
+                var result = pointInCircle(drawnCrosses[index].mouseXPosition, drawnCrosses[index].mouseYPosition, pos.x, pos.y, radius);
 
                 if (result) {
                     eraseCross = drawnCrosses[index];
@@ -198,7 +239,7 @@
                 }
             }
         }
-        
+
         if (typeof eraseCross !== 'undefined') {
             drawnCrosses.splice(eraseIndexCross, 1);
             removedCrosses.push(eraseCross);
@@ -219,15 +260,15 @@
         var drawImage = true;
         var index;
         for (index = 0; index < drawnCrosses.length; index++) {
-            if (drawnCrosses[index].pos.x == x && drawnCrosses[index].pos.y == y) {
+            if (drawnCrosses[index].mouseXPosition == x && drawnCrosses[index].mouseYPosition == y) {
                 drawImage = false;
             }
         }
 
         if (drawImage) {
-            drawCross(x, y,  buttonType);
+            drawCross(x, y, buttonType);
 
-            var crossObject = { pos: pos, buttonType: buttonType };
+            var crossObject = { mouseXPosition: pos.x, mouseYPosition: pos.y, crossSize: buttonType.enumValue, buttonType: buttonType };
 
             drawnCrosses.push(crossObject);
         }
@@ -235,7 +276,7 @@
 
     function drawCross(x, y, buttonTypeEnum) {
         context.beginPath();
-        
+
 
         context.moveTo(x - buttonTypeEnum.value, y - buttonTypeEnum.value);
         context.lineTo(x + buttonTypeEnum.value, y + buttonTypeEnum.value);
@@ -252,7 +293,7 @@
         context.stroke();
     }
 
-    undoButton.click( function() {
+    undoButton.click(function () {
         if (drawnCrosses.length != 0) {
             var undoCross = drawnCrosses.pop();
             removedCrosses.push(undoCross);
@@ -261,7 +302,7 @@
         }
     });
 
-    redoButton.click(function() {
+    redoButton.click(function () {
         if (removedCrosses.length != 0) {
 
             var redoCross = removedCrosses.pop();
@@ -276,8 +317,9 @@
 
         var index;
         for (index = 0; index < drawnCrosses.length; ++index) {
-            var pos = drawnCrosses[index].pos;
-            drawCross(pos.x, pos.y, drawnCrosses[index].buttonType);
+            var mousePosX = drawnCrosses[index].mouseXPosition;
+            var mousePosY = drawnCrosses[index].mouseYPosition;
+            drawCross(mousePosX, mousePosY, drawnCrosses[index].buttonType);
         }
     }
 

@@ -64,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAO\Interfaces\ITreatmentDAO.cs" />
+    <Compile Include="DAO\TreatmentDAO.cs" />
     <Compile Include="Entity\AfflictionAreaEntity.cs" />
     <Compile Include="Entity\CustomerEntity.cs" />
     <Compile Include="Entity\TreatmentEntity.cs" />
@@ -88,6 +90,10 @@
     <Compile Include="Migrations\201510061734041_AfflicationArea.Designer.cs">
       <DependentUpon>201510061734041_AfflicationArea.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510071831127_name.cs" />
+    <Compile Include="Migrations\201510071831127_name.Designer.cs">
+      <DependentUpon>201510071831127_name.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MuscleTherapyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +117,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510061734041_AfflicationArea.resx">
       <DependentUpon>201510061734041_AfflicationArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510071831127_name.resx">
+      <DependentUpon>201510071831127_name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

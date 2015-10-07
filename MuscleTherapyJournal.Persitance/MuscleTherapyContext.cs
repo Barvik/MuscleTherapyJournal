@@ -9,6 +9,7 @@ namespace MuscleTherapyJournal.Persitance
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<CustomerEntity> Customers { get; set; }
         public DbSet<TreatmentEntity> Treatments { get; set; }
+        public DbSet<AfflictionAreaEntity> AfflictionAreas { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -18,6 +19,7 @@ namespace MuscleTherapyJournal.Persitance
             modelBuilder.Entity<UserEntity>().ToTable("User");
             modelBuilder.Entity<CustomerEntity>().ToTable("Customer");
             modelBuilder.Entity<TreatmentEntity>().ToTable("Treatment");
+            modelBuilder.Entity<AfflictionAreaEntity>().ToTable("AfflictionArea");
         }
 
 
