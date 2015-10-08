@@ -20,8 +20,17 @@ namespace MuscleTherapyJournal.Persitance
             modelBuilder.Entity<CustomerEntity>().ToTable("Customer");
             modelBuilder.Entity<TreatmentEntity>().ToTable("Treatment");
             modelBuilder.Entity<AfflictionAreaEntity>().ToTable("AfflictionArea");
-        }
 
+            modelBuilder.Entity<AfflictionAreaEntity>()
+                .HasRequired<TreatmentEntity>(x => x.Treatment)
+                .WithMany(x => x.AfflictionAreas)
+                .HasForeignKey(x => x.TreatmentId);
+
+            modelBuilder.Entity<TreatmentEntity>()
+                .HasMany<AfflictionAreaEntity>(x => x.AfflictionAreas)
+                .WithRequired(x => x.Treatment)
+                .HasForeignKey(x => x.TreatmentId);
+        }
 
         public MuscleTherapyContext()
             : base("MuscleTherapy")

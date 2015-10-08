@@ -21,6 +21,6 @@ namespace MuscleTherapyJournal.Persitance.Entity
         [ForeignKey("UserId")]
         public UserEntity User { get; set; }
 
-        public ICollection<AfflictionAreaEntity> AfflictionAreas { get; set; } 
+        public IList<AfflictionAreaEntity> AfflictionAreas { get; set; } 
     }
 }

@@ -64,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAO\AreaAfflicationDAO.cs" />
+    <Compile Include="DAO\Interfaces\IAreaAfflicationDAO.cs" />
     <Compile Include="DAO\Interfaces\ITreatmentDAO.cs" />
     <Compile Include="DAO\TreatmentDAO.cs" />
     <Compile Include="Entity\AfflictionAreaEntity.cs" />
@@ -94,6 +96,18 @@
     <Compile Include="Migrations\201510071831127_name.Designer.cs">
       <DependentUpon>201510071831127_name.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510072014012_MultiManytoOne.cs" />
+    <Compile Include="Migrations\201510072014012_MultiManytoOne.Designer.cs">
+      <DependentUpon>201510072014012_MultiManytoOne.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510072018254_Change.cs" />
+    <Compile Include="Migrations\201510072018254_Change.Designer.cs">
+      <DependentUpon>201510072018254_Change.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510072019160_teasdsad.cs" />
+    <Compile Include="Migrations\201510072019160_teasdsad.Designer.cs">
+      <DependentUpon>201510072019160_teasdsad.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MuscleTherapyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,6 +134,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510071831127_name.resx">
       <DependentUpon>201510071831127_name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510072014012_MultiManytoOne.resx">
+      <DependentUpon>201510072014012_MultiManytoOne.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510072018254_Change.resx">
+      <DependentUpon>201510072018254_Change.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510072019160_teasdsad.resx">
+      <DependentUpon>201510072019160_teasdsad.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -59,6 +59,8 @@
     <Compile Include="Factories\TreatmentFactory.cs" />
     <Compile Include="Infrastructure\Registries\CoreRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AreaAfflicationService.cs" />
+    <Compile Include="Services\Interfaces\IAreaAfflicationService.cs" />
     <Compile Include="Services\Interfaces\ITreatmentService.cs" />
     <Compile Include="Services\TreatmentService.cs" />
   </ItemGroup>

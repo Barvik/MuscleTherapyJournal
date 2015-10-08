@@ -95,7 +95,7 @@
         })
         .done(function (data) {
             console.log("Sucess");
-            })
+        })
         .fail(function (error) {
             console.log("Noe gikk galt: ", error);
         });
@@ -135,6 +135,19 @@
         return false;
     }
 
+    function SetButtonTypeEnum(crossSize) {
+        switch (crossSize) {
+            case 1:
+                return ButtonTypeEnum.SMALL;
+            case 2:
+                return  ButtonTypeEnum.MEDIUM;
+            case 3:
+                return buttonType = ButtonTypeEnum.LARGE;
+            default:
+                return buttonType = ButtonTypeEnum.NOTSET;
+        }
+    }
+    
     $(document).ready(function () {
 
         $.ajax({
@@ -146,6 +159,8 @@
             success: function (data) {
                 imgs = data;
                 setCanvasImage(imgs.base64imgage);
+                setPersistedCrosses();
+                
             },
             error: function (xhr) {
                 alert("Error occurred while loading the image. "
@@ -163,6 +178,28 @@
 
         resizeCanvasImage(base_image, canvas, 800, 400);
     };
+
+    function setPersistedCrosses() {
+        var persistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.AfflictionAreas));
+        if (persistedCrosses.length > 0) {
+
+            $.each(persistedCrosses, function() {
+                buttonType = SetButtonTypeEnum(this.CrossSize);
+
+                var crossObject = { mouseXPosition: this.MouseXPosition, 
+                    mouseYPosition: this.MouseYPosition, crossSize: this.CrossSize, 
+                    buttonType: buttonType, isPersisted : true };
+
+
+                drawnCrosses.push(crossObject);
+            });
+
+            $.each(drawnCrosses, function() {
+                drawCross(this.mouseXPosition, this.mouseYPosition, this.buttonType);
+            });
+
+        }
+    }
 
     function resizeCanvasImage(img, canvas, maxWidth, maxHeight) {
         var imgWidth = img.width,
@@ -235,6 +272,7 @@
 
                 if (result) {
                     eraseCross = drawnCrosses[index];
+                    eraseCross.isPersisted = false;
                     eraseIndexCross = index;
                 }
             }
@@ -268,7 +306,10 @@
         if (drawImage) {
             drawCross(x, y, buttonType);
 
-            var crossObject = { mouseXPosition: pos.x, mouseYPosition: pos.y, crossSize: buttonType.enumValue, buttonType: buttonType };
+            var crossObject = { mouseXPosition: pos.x, mouseYPosition: pos.y, 
+                crossSize: buttonType.enumValue, buttonType: buttonType, isPersisted : false };
+
+            console.log(crossObject);
 
             drawnCrosses.push(crossObject);
         }
@@ -276,7 +317,6 @@
 
     function drawCross(x, y, buttonTypeEnum) {
         context.beginPath();
-
 
         context.moveTo(x - buttonTypeEnum.value, y - buttonTypeEnum.value);
         context.lineTo(x + buttonTypeEnum.value, y + buttonTypeEnum.value);
@@ -295,10 +335,17 @@
 
     undoButton.click(function () {
         if (drawnCrosses.length != 0) {
+            console.log(drawnCrosses);
             var undoCross = drawnCrosses.pop();
-            removedCrosses.push(undoCross);
 
-            reDrawImageWithRemainingCrosses();
+            if (!undoCross.isPersisted) {
+                removedCrosses.push(undoCross);
+
+                reDrawImageWithRemainingCrosses();
+            } else {
+                drawnCrosses.push(undoCross);
+            }
+            
         }
     });
 
