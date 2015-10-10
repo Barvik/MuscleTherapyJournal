@@ -65,7 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\AreaAfflicationDAO.cs" />
+    <Compile Include="DAO\CustomerDAO.cs" />
     <Compile Include="DAO\Interfaces\IAreaAfflicationDAO.cs" />
+    <Compile Include="DAO\Interfaces\ICustomerDAO.cs" />
     <Compile Include="DAO\Interfaces\ITreatmentDAO.cs" />
     <Compile Include="DAO\TreatmentDAO.cs" />
     <Compile Include="Entity\AfflictionAreaEntity.cs" />
@@ -108,6 +110,30 @@
     <Compile Include="Migrations\201510072019160_teasdsad.Designer.cs">
       <DependentUpon>201510072019160_teasdsad.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510081441181_customer_profession.cs" />
+    <Compile Include="Migrations\201510081441181_customer_profession.Designer.cs">
+      <DependentUpon>201510081441181_customer_profession.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510091139202_AddCustomerFullName.cs" />
+    <Compile Include="Migrations\201510091139202_AddCustomerFullName.Designer.cs">
+      <DependentUpon>201510091139202_AddCustomerFullName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510091140505_ChangeCustomerFullNameToCustomerName.cs" />
+    <Compile Include="Migrations\201510091140505_ChangeCustomerFullNameToCustomerName.Designer.cs">
+      <DependentUpon>201510091140505_ChangeCustomerFullNameToCustomerName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510091143208_testVarchar.cs" />
+    <Compile Include="Migrations\201510091143208_testVarchar.Designer.cs">
+      <DependentUpon>201510091143208_testVarchar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510091145312_ChangeVarCharMaxToVarChar.cs" />
+    <Compile Include="Migrations\201510091145312_ChangeVarCharMaxToVarChar.Designer.cs">
+      <DependentUpon>201510091145312_ChangeVarCharMaxToVarChar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510091156151_SetBirthDateNullable.cs" />
+    <Compile Include="Migrations\201510091156151_SetBirthDateNullable.Designer.cs">
+      <DependentUpon>201510091156151_SetBirthDateNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MuscleTherapyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -143,6 +169,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510072019160_teasdsad.resx">
       <DependentUpon>201510072019160_teasdsad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510081441181_customer_profession.resx">
+      <DependentUpon>201510081441181_customer_profession.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510091139202_AddCustomerFullName.resx">
+      <DependentUpon>201510091139202_AddCustomerFullName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510091140505_ChangeCustomerFullNameToCustomerName.resx">
+      <DependentUpon>201510091140505_ChangeCustomerFullNameToCustomerName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510091143208_testVarchar.resx">
+      <DependentUpon>201510091143208_testVarchar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510091145312_ChangeVarCharMaxToVarChar.resx">
+      <DependentUpon>201510091145312_ChangeVarCharMaxToVarChar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510091156151_SetBirthDateNullable.resx">
+      <DependentUpon>201510091156151_SetBirthDateNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

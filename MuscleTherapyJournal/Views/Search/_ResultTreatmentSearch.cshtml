@@ -1,0 +1,45 @@
+﻿@model PagedList.PagedList<MuscleTherapyJournal.Domain.Model.Treatment>
+
+@if (Model.Any())
+{
+    <hr />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Navn</th>
+                <th>Telefonnummer</th>
+                <th>Fødselsdato</th>
+                <th>Behandling dato</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var treatment in Model)
+            {
+                <tr>
+                    <td>
+                        <a class="btn btn-primary" href="@Url.Action("Treatment", "Treatment")">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+
+                    <td>@treatment.Customer.CustomerName</td>
+                    <td>@treatment.Customer.MobilePhoneNumber</td>
+                    <td>@treatment.Customer.BirthDay.GetValueOrDefault().ToString("dd.MM.yyyy")</td>
+                    <td>@treatment.CreatedDate.ToString("dd.MM.yyyy")</td>
+                    <td class="right">
+                        <div class="btn btn-default" data-placement="top" rel="tooltip">
+                            <i class="fa fa-edit"></i>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">Kunne ikke finne noen behandlinger</div>
+}

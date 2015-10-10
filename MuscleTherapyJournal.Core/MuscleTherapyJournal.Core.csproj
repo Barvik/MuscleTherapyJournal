@@ -55,12 +55,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factories\CustomerFactory.cs" />
+    <Compile Include="Factories\Interfaces\ICustomerFactory.cs" />
     <Compile Include="Factories\Interfaces\ITreatmentFactory.cs" />
     <Compile Include="Factories\TreatmentFactory.cs" />
     <Compile Include="Infrastructure\Registries\CoreRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AreaAfflicationService.cs" />
+    <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\Interfaces\IAreaAfflicationService.cs" />
+    <Compile Include="Services\Interfaces\ICustomerService.cs" />
     <Compile Include="Services\Interfaces\ITreatmentService.cs" />
     <Compile Include="Services\TreatmentService.cs" />
   </ItemGroup>

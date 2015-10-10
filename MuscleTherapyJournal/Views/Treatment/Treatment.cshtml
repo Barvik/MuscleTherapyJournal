@@ -2,19 +2,35 @@
 @model MuscleTherapyJournal.Models.TreatmentViewModel
 
 @{
+    ViewBag.Title = "Behandling";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @using (Html.BeginForm("Treatment", "Treatment", FormMethod.Post, new { id = "treatmentForm" }))
 {
     <div class="container">
-        <h2>Hei</h2>
         <div class="row">
             <div class="col-md-6">
-                <button title="Undo" type="button" id="undoButton"><img src="/Images/Undo-icon.png" class="canvas-toolbar" /></button>
-                <button title="Redo" type="button" id="redoButton"><img src="/Images/Redo-icon.png" class="canvas-toolbar" /></button>
-                <button title="Lite kryss" type="button" id="smallCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-small" /></button>
-                <button title="Stort kryss" type="button" id="largeCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-large" /></button>
+                
+                @Html.LabelFor(model => model.CreatedDate, new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.CreatedDate, new
+                {
+                    type = "date" , 
+                    min = DateTime.Now.Year, 
+                    max = DateTime.Now.AddDays(1),
+                    step = "1",
+                    @class = "datefield form-control"
+                })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="btn-group">
+                    <button title="Undo" type="button" id="undoButton"><img src="/Images/Undo-icon.png" class="canvas-toolbar" /></button>
+                    <button title="Redo" type="button" id="redoButton"><img src="/Images/Redo-icon.png" class="canvas-toolbar" /></button>
+                    <button title="Lite kryss" type="button" id="smallCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-small" /></button>
+                    <button title="Stort kryss" type="button" id="largeCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-large" /></button>
+                </div>
             </div>
         </div>
 
@@ -22,14 +38,21 @@
         <div class="row">
             <div class="col-lg-6">
                 <canvas id="treatmentCanvas" width="2140" height="2316"></canvas>
+                
             </div>
-
             <div class="col-md-6">
                 @Html.TextAreaFor(model => model.Treatment.Anamnesis, new
-            {
-                @class = "form-control textarea",
-                @style = "font-family: Calibri; min-width: 100%; max-height: 150px; min-height: 150px;"
-            })
+                {
+                    @class = "form-control textarea",
+                    @style = "font-family: Calibri; min-width: 100%; max-height: 202,5x; min-height: 202px;"
+                })
+                
+                @Html.TextAreaFor(model => model.Treatment.Observations, new
+                {
+                    @name = "Lol",
+                    @class = "form-control textarea",
+                    @style = "font-family: Calibri; min-width: 100%; max-height: 202,5px; min-height: 202px;"
+                })
             </div>
         </div>
 
@@ -38,12 +61,12 @@
 
             </div>
             <div class="col-md-6 bottom-align-text">
-                @Html.TextAreaFor(model => model.Treatment.Observations, new
+                @*@Html.TextAreaFor(model => model.Treatment.Observations, new
                 {
                     @name = "Lol",
                     @class = "form-control textarea",
                     @style = "font-family: Calibri; min-width: 100%; max-height: 150px; min-height: 150px;"
-                })
+                })*@
             </div>
         </div>
         
@@ -150,6 +173,10 @@
     
     $(document).ready(function () {
 
+        $(function() {
+            $( "#datepicker" ).datepicker({  maxDate: new Date() });
+        });
+
         $.ajax({
             cache: false,
             type: "GET",
@@ -167,6 +194,7 @@
                     + xhr.responseText);
             }
         });
+
     });
 
     var setCanvasImage = function (base64Data) {

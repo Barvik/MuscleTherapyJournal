@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -40,13 +41,15 @@ namespace MuscleTherapyJournal.Controllers
                 {
                     Treatment = treatment
                 };
+                model.CreatedDate = DateTime.Now.ToString("yyyy-MM-dd");
+
 
                 return View(model);
             }
 
             model = new TreatmentViewModel
             {
-                Treatment = _treatmentFactory.BuildNewTreatmentModel()
+                Treatment = _treatmentFactory.BuildNewTreatmentModel(),
             };
 
             return View(model);

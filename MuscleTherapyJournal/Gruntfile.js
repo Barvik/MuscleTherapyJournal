@@ -12,7 +12,8 @@ module.exports = function (grunt) {
                 },
                 files: {
                     /*Just moving the MDS CSS files we got now, when we compile the less ourself it doesn't work. */
-                    "Content/treatment.css": "less/treatment.less"
+                    "Content/treatment.css": "less/treatment.less",
+                    "Content/pages.css": "less/Pages/pages.less"
                 }
             }
         },

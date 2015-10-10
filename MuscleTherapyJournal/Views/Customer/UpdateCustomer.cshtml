@@ -1,0 +1,179 @@
+﻿@model MuscleTherapyJournal.Models.CustomerViewModel
+
+@{
+    ViewBag.Title = "KundeInformasjon";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("UpdateCustomer", "Customer", FormMethod.Post, new { id = "customerForm" }))
+{
+    <div class="container">
+        <h1>KundeInformasjon</h1>
+        <hr/>
+        @Html.ValidationSummary(true)
+        
+        @Html.HiddenFor(model => model.IsPostBack)
+
+        <div class="row" id="customerPersist">
+            <div class="col-md-4">
+                @if (Model.UpdateCustomerSuccess)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @Model.Customer.CustomerName ble lagret i databasen.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        Det skjedde en feil, <b>@Model.Customer.CustomerName</b> ble ikke lagret i databasen. Vennligst prøv igjen.
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <br/>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.FirstName, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.FirstName, new { @class = "form-control" , Name = "firstname" })
+                    @Html.ValidationMessageFor(model => model.Customer.FirstName, null, new { @class = "help-block" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.Surname, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.Surname, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.LastName, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.LastName, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.MobilePhoneNumber, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.MobilePhoneNumber, new { @class = "form-control" })
+                </div>
+                
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BirthDay, new { @class = "control-label" })
+                    <div class="form-inline">
+                        @Html.TextBoxFor(model => model.BirthDay, new { type = "text", @class = "datefield form-control" })
+                        <button tabindex="-1" id="showDatePicker" type="button"><i class="fa fa-calendar"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.Address, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.Address, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.ZipCode, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.ZipCode, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.LivingLocation, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.LivingLocation, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.Profession, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.Profession, new { @class = "form-control" })
+                </div>
+                
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Customer.Email, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Customer.Email, new { @class = "form-control" })
+                </div>
+            </div>
+
+        </div>
+        
+        <br/>
+
+        <div class="row">
+            <div class="col-md-4">
+                
+            </div>
+            <div class="col-md-4">
+                <div class="btn-group">
+                    <button class="btn btn-default">Avbryt</button>
+                    @if (Model.Customer.CustomerId > 0)
+                    {
+                        <button class="btn btn-primary" id="saveCustomer">
+                            <i class="fa fa-floppy-o"></i>
+                            Oppdater Kunde
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" id="saveCustomer">
+                            <i class="fa fa-floppy-o"></i>
+                            Lagre Kunde
+                        </button>
+                    }
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var isPostBack = $("#IsPostBack").val();
+        console.log(isPostBack);
+
+        $("#customerPersist").hide();
+
+        if (isPostBack) {
+            $("#customerPersist").show();
+        }
+
+        $("#customerForm").validate({
+            rules: {
+                firstname: {
+                    minlength: 3,  // <- here
+                    maxlength: 15,
+                    required: true
+                },
+            },
+            messages: {
+                firstname: "Fornavn er påkrevd"
+            }
+        });
+
+        $("#saveCustomer").click(function() {
+            if ($("customerForm").valid()) {
+                $("#customerForm").submit(function () {
+                                console.log("Success");
+                            });
+            }
+        });
+
+        //$("#saveCustomer").click(function () {
+        //    console.log("Hei");
+        //    //if ($("customerForm").valid()) {
+        //        $("#customerForm").submit(function () {
+        //            console.log("Success");
+        //        });
+        //    //}
+        //});
+        $("#showDatePicker").click(function() {
+            $(".datefield").datepicker("show");
+        });
+    });
+
+   
+</script>

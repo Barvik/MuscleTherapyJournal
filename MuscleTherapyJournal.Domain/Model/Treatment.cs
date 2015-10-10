@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MuscleTherapyJournal.Domain.Model
 {
     public class Treatment
     {
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+
         public int TreatmentId { get; set; }
         public int CustomerId { get; set; }
         public DateTime CreatedDate { get; set; }

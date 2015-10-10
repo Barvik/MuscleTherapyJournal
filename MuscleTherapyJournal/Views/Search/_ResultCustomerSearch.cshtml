@@ -1,0 +1,64 @@
+﻿@using PagedList.Mvc
+@model PagedList.PagedList<MuscleTherapyJournal.Domain.Model.Customer>
+
+@if (Model.Any())
+{
+    <hr />
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="vcenter">
+                Viser @Model.FirstItemOnPage til @Model.LastItemOnPage av totalt @Model.TotalItemCount kunder.
+
+            </div>
+
+            <div class="pull-right">
+                @Html.PagedListPager(Model, page => Url.Action("SearchResult",
+                new { page, pageSize = Model.PageSize }))
+
+            </div>
+        </div>
+    </div>
+    
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Fornavn</th>
+                <th>Etternavn</th>
+                <th>Telefonnummer</th>
+                <th>Fødselsdato</th>
+                <th></th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            @foreach (var customer in Model)
+            {   
+                <tr>
+                    <td>
+                        <a title="Ny behandling" class="btn btn-primary" data-toggle="tooltip" data-placement="top" 
+                           href="@Url.Action("Treatment", "Treatment")">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+
+                    <td>@customer.FirstName</td>
+                    <td>@customer.LastName</td>
+                    <td>@customer.MobilePhoneNumber</td>
+                    <td>@customer.BirthDay.GetValueOrDefault().ToString("dd.MM.yyyy")</td>
+                    <td class="right">
+                        <a title="Endre kunde" class="btn btn-success" data-toggle="tooltip" data-placement="top"
+                           href="@Url.Action("UpdateCustomer", "Customer", new { customerId = customer.CustomerId })">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">Kunne ikke finne noen kunder</div>
+}

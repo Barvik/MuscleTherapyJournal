@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MuscleTherapyJournal.Persitance.Entity
 {
@@ -11,9 +8,13 @@ namespace MuscleTherapyJournal.Persitance.Entity
     {
         [Key]
         public int UserId { get; set; }
+        [MaxLength(255), Column(TypeName = "VARCHAR")]
         public string FirstName { get; set; }
+        [MaxLength(255), Column(TypeName = "VARCHAR")]
         public string LastName { get; set; }
+        [MaxLength(255), Column(TypeName = "VARCHAR")]
         public string Email { get; set; }
+        [MaxLength(255), Column(TypeName = "VARCHAR")]
         public string MobilePhoneNumber { get; set; }
         public bool MustChangePassword { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -21,6 +22,7 @@ namespace MuscleTherapyJournal.Persitance.Entity
         public bool Activated { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
+        [MaxLength(255), Column(TypeName = "VARCHAR")]
         public string UserName { get; set; }
     }
 }

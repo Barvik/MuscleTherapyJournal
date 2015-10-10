@@ -28,6 +28,11 @@
   min-height: 150px;
   bottom: auto;
 }
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
 .myrow {
   font-size: 0;
 }

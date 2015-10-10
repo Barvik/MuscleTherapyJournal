@@ -1,0 +1,124 @@
+﻿@model MuscleTherapyJournal.Models.SearchViewModel
+
+@{
+    ViewBag.Title = "Søk";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1>Søkeregister</h1>
+    <ul class="nav nav-tabs" id="searchTabs" role="tablist">
+        <li role="presentation" class="active">
+            <a id="searchTypeCustomer" href="#" aria-controls="searchCustomer" role="tab" data-toggle="tab">Kunde</a>
+        </li>
+        <li role="presentation">
+            <a id="searchTypeTreatment" href="#" aria-controls="searchTreatment" role="tab" data-toggle="tab">Behandling</a>
+        </li>
+    </ul>
+    
+    <br/>
+</div>
+
+
+@using (Html.BeginForm("SearchResult", "Search", FormMethod.Get, new {id = "searchForm"}))
+{
+    @Html.HiddenFor(model => model.SearchType, new { Value = 0 })
+    <div class="container">
+        @Html.ValidationSummary(true)
+        
+
+        <div class="row">
+            <div class="col-md-1">
+                @Html.LabelFor(model => model.SearchCriteria.CustomerName, new { @class = "control-label" })
+            </div>
+            
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.SearchCriteria.CustomerName, new { @class = "form-control" })
+            </div>
+            
+            <div class="search-type-customer">
+                <div class="col-md-1">
+                    @Html.LabelFor(model => model.SearchCriteria.CustomerName, new { @class = "control-label" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.SearchCriteria.CustomerName, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                @Html.LabelFor(model => model.SearchCriteria.PhoneNumber, new { @class = "control-label" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.SearchCriteria.PhoneNumber, new { @class = "form-control" })
+            </div>
+            
+            <div class="search-type-treatment">
+                <div class="col-md-1">
+                    @Html.LabelFor(model => model.SearchCriteria.PhoneNumber, new { @class = "control-label" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.SearchCriteria.PhoneNumber, new { @class = "form-control" })
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="btn-group">
+                    <button class="btn btn-primary" title="Søk" data-toggle="tooltip" data-placement="top" type="submit">
+                        <i class="fa fa-search"></i>
+                        Søk
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        @if (Model.ResultCustomerSearch != null)
+        {
+            @Html.Partial("_ResultCustomerSearch", @Model.ResultCustomerSearch)
+        }
+        
+        @if (Model.ResultTreatmetSearch != null)
+        {
+            @Html.Partial("_ResultTreatmentSearch", @Model.ResultTreatmetSearch)
+        }
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".search-type-treatment").hide();
+
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        $('#searchTabs a').click(function(e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if (e.target.id == "searchTypeCustomer") {
+                $(".search-type-customer").show();
+                $(".search-type-treatment").hide();
+                $("#SearchType").val(1);
+
+            }
+
+            if (e.target.id == "searchTypeTreatment") {
+                $(".search-type-customer").hide();
+                $(".search-type-treatment").show();
+                $("#SearchType").val(2);
+            }
+        });
+    });
+
+    
+</script>
+
+
