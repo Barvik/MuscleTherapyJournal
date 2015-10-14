@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("UpdateCustomer", "Customer", FormMethod.Post, new { id = "customerForm" }))
+@using (Html.BeginForm("UpdateCustomer", "Customer", FormMethod.Post, new { id = "customerForm", autocomplete = "off" }))
 {
     <div class="container">
         <h1>KundeInformasjon</h1>
@@ -15,7 +15,7 @@
         @Html.HiddenFor(model => model.IsPostBack)
 
         <div class="row" id="customerPersist">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 @if (Model.UpdateCustomerSuccess)
                 {
                     <div class="alert alert-success" role="alert">
@@ -61,7 +61,6 @@
                     @Html.LabelFor(model => model.BirthDay, new { @class = "control-label" })
                     <div class="form-inline">
                         @Html.TextBoxFor(model => model.BirthDay, new { type = "text", @class = "datefield form-control" })
-                        <button tabindex="-1" id="showDatePicker" type="button"><i class="fa fa-calendar"></i></button>
                     </div>
                 </div>
             </div>
@@ -162,14 +161,6 @@
             }
         });
 
-        //$("#saveCustomer").click(function () {
-        //    console.log("Hei");
-        //    //if ($("customerForm").valid()) {
-        //        $("#customerForm").submit(function () {
-        //            console.log("Success");
-        //        });
-        //    //}
-        //});
         $("#showDatePicker").click(function() {
             $(".datefield").datepicker("show");
         });

@@ -15,15 +15,18 @@ namespace MuscleTherapyJournal.Controllers
     {
         private readonly ITreatmentFactory _treatmentFactory;
         private readonly ITreatmentService _treatmentService;
+        private readonly ICustomerService _customerService;
         private readonly ILog _logger = LogManager.GetLogger(typeof(TreatmentController));
 
-        public TreatmentController(ITreatmentFactory treatmentFactory, ITreatmentService treatmentService)
+        public TreatmentController(ITreatmentFactory treatmentFactory, ITreatmentService treatmentService, ICustomerService customerService)
         {
             if (treatmentFactory == null) throw new ArgumentNullException("treatmentFactory");
             if (treatmentService == null) throw new ArgumentNullException("treatmentService");
+            if (customerService == null) throw new ArgumentNullException("customerService");
 
             _treatmentFactory = treatmentFactory;
             _treatmentService = treatmentService;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -36,21 +39,35 @@ namespace MuscleTherapyJournal.Controllers
             if (treatmentId > 0)
             {
                 var treatment = _treatmentService.GetTreatmentById(treatmentId);
-
+                treatment.Customer = _customerService.GetCustomer(treatment.CustomerId);
                 model = new TreatmentViewModel
                 {
                     Treatment = treatment
                 };
-                model.CreatedDate = DateTime.Now.ToString("yyyy-MM-dd");
+                model.CreatedDate = DateTime.Now.ToString("dd.MM.yyyy");
+                
+            }
+            else
+            {
+                model = new TreatmentViewModel
+                {
+                    Treatment = _treatmentFactory.BuildNewTreatmentModel(),
+                };
 
-
-                return View(model);
+                if (customerId > 0)
+                {
+                    model.Treatment.Customer = _customerService.GetCustomer(customerId);
+                }
             }
 
-            model = new TreatmentViewModel
+            var today = DateTime.Today;
+            var age = today.Year - model.Treatment.Customer.BirthDay.GetValueOrDefault().Year;
+            if (model.Treatment.Customer.BirthDay.GetValueOrDefault() > today.AddYears(-age))
             {
-                Treatment = _treatmentFactory.BuildNewTreatmentModel(),
-            };
+                age--;
+            }
+            model.Treatment.Customer.Age = age;
+            
 
             return View(model);
         }

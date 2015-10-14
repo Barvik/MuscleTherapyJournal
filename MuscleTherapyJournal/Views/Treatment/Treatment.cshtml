@@ -1,4 +1,5 @@
-﻿@using MuscleTherapyJournal.Domain.Model
+﻿@using System.Globalization
+@using MuscleTherapyJournal.Domain.Model
 @model MuscleTherapyJournal.Models.TreatmentViewModel
 
 @{
@@ -8,65 +9,147 @@
 
 @using (Html.BeginForm("Treatment", "Treatment", FormMethod.Post, new { id = "treatmentForm" }))
 {
+    @Html.HiddenFor(model => model.Treatment.TreatmentId)
+    
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                
-                @Html.LabelFor(model => model.CreatedDate, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.CreatedDate, new
-                {
-                    type = "date" , 
-                    min = DateTime.Now.Year, 
-                    max = DateTime.Now.AddDays(1),
-                    step = "1",
-                    @class = "datefield form-control"
-                })
-            </div>
+        <div class="page-header">
+            <h1>Journal for @Model.Treatment.Customer.CustomerName
+                <small class="pull-right form-inline">
+                    @Html.LabelFor(model => model.CreatedDate, new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.CreatedDate, new
+                    {
+                        @class = "datefield form-control",
+                    })
+                </small>
+            </h1>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="btn-group">
-                    <button title="Undo" type="button" id="undoButton"><img src="/Images/Undo-icon.png" class="canvas-toolbar" /></button>
-                    <button title="Redo" type="button" id="redoButton"><img src="/Images/Redo-icon.png" class="canvas-toolbar" /></button>
-                    <button title="Lite kryss" type="button" id="smallCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-small" /></button>
-                    <button title="Stort kryss" type="button" id="largeCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-large" /></button>
+    </div>
+    
+    <div class="container">
+        @if (!string.IsNullOrWhiteSpace(Model.Treatment.Customer.CustomerName))
+        {
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Treatment.Customer.BirthDay, new { @class = "control-label" })
+                </div>
+                <div class="col-md-2">
+                    @Model.Treatment.Customer.BirthDay.GetValueOrDefault().ToString("dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("no"))
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Treatment.Customer.Age, new { @class = "control-label" })
+                </div>
+                <div class="col-md-2">
+                    @Model.Treatment.Customer.Age
                 </div>
             </div>
-        </div>
-
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Treatment.Customer.MobilePhoneNumber) || !string.IsNullOrWhiteSpace(Model.Treatment.Customer.Address))
+        {
+            <div class="row">
+                @if (!string.IsNullOrWhiteSpace(Model.Treatment.Customer.MobilePhoneNumber))
+                {
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.Treatment.Customer.MobilePhoneNumber, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-2">
+                        @Model.Treatment.Customer.MobilePhoneNumber
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Treatment.Customer.Address))
+                {
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.Treatment.Customer.Address, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-2">
+                        @Model.Treatment.Customer.Address
+                    </div>
+                }
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Treatment.Customer.Profession) || !string.IsNullOrWhiteSpace(Model.Treatment.Customer.Email))
+        {
+            <div class="row">
+                @if (!string.IsNullOrWhiteSpace(Model.Treatment.Customer.Profession))
+                {
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.Treatment.Customer.Profession, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-2">
+                        @Model.Treatment.Customer.Profession
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Treatment.Customer.Email))
+                {
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.Treatment.Customer.Email, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Model.Treatment.Customer.Email
+                    </div>
+                }
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.FullAddress))
+        {
+            <div class="row">
+                <div class="col-md-5">
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Treatment.Customer.CustomerName, new { @class = "control-label" })
+                </div>
+                <div class="col-md-3">
+                    @Model.Treatment.Customer.Address, @Model.Treatment.Customer.ZipCode
+                </div>
+            </div>
+        }
+        
+        <br/>
 
         <div class="row">
-            <div class="col-lg-6">
-                <canvas id="treatmentCanvas" width="2140" height="2316"></canvas>
+            <div class="col-md-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Html.LabelFor(model => model.Treatment.AfflictionAreas, new { @class = "control-label" })
+
+                        <div class="btn-group pull-right">
+                            <button title="Undo" type="button" id="undoButton"><img src="/Images/Undo-icon.png" class="canvas-toolbar" /></button>
+                            <button title="Redo" type="button" id="redoButton"><img src="/Images/Redo-icon.png" class="canvas-toolbar" /></button>
+                            <button title="Lite kryss" type="button" id="smallCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-small" /></button>
+                            <button title="Stort kryss" type="button" id="largeCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-large" /></button>
+                        </div>
+                    </div>
+                    <canvas id="treatmentCanvas"></canvas>
+                </div>
                 
             </div>
-            <div class="col-md-6">
-                @Html.TextAreaFor(model => model.Treatment.Anamnesis, new
-                {
-                    @class = "form-control textarea",
-                    @style = "font-family: Calibri; min-width: 100%; max-height: 202,5x; min-height: 202px;"
-                })
+            <div class="col-md-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Html.LabelFor(model => model.Treatment.Anamnesis, new { @class = "control-label" })
+                    </div>
+                    
+                    @Html.TextAreaFor(model => model.Treatment.Anamnesis, new
+                    {
+                        @placeholder = "Legg til Anamnese",
+                        @class = "form-control textarea",
+                        @spellcheck = "false",
+                        @style = "font-family: Calibri; width: 100%; max-height: 302,5x; min-height: 302px;"
+                    })
+                </div>
                 
-                @Html.TextAreaFor(model => model.Treatment.Observations, new
-                {
-                    @name = "Lol",
-                    @class = "form-control textarea",
-                    @style = "font-family: Calibri; min-width: 100%; max-height: 202,5px; min-height: 202px;"
-                })
-            </div>
-        </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Html.LabelFor(model => model.Treatment.Observations, new { @class = "control-label" })
+                    </div>
 
-        <div class="row">
-            <div class="col-md-6">
-
-            </div>
-            <div class="col-md-6 bottom-align-text">
-                @*@Html.TextAreaFor(model => model.Treatment.Observations, new
-                {
-                    @name = "Lol",
-                    @class = "form-control textarea",
-                    @style = "font-family: Calibri; min-width: 100%; max-height: 150px; min-height: 150px;"
-                })*@
+                    @Html.TextAreaFor(model => model.Treatment.Observations, new
+                    {
+                        @placeholder = "Legg til Observasjoner",
+                        @spellcheck = "false",
+                        @class = "form-control textarea",
+                        @style = "font-family: Calibri; min-width: 100%; max-height: 102,5px; min-height: 102px;"
+                    })
+                </div>
             </div>
         </div>
         
@@ -80,7 +163,12 @@
                 </div>
             </div>
         </div>
+        @Html.Partial("_ModalTreatment")
+
+
     </div>
+
+
 }
 
 <script type="text/javascript">
@@ -94,6 +182,7 @@
     leftButtonClick = 0;
     rightButtonClick = 2;
 
+
     $("#treatmentForm").submit(function (event) {
         console.log("Handler for .submit() called.");
         event.preventDefault();
@@ -101,9 +190,19 @@
 
     $("#saveTreatment").click(function () {
 
+        //$('#treatmentModal').modal('show');
+
         var afflication = JSON.stringify(drawnCrosses);
-        var observations = JSON.stringify($("#Treatment_Observations").val().split('\n'));
-        var anamnesis = JSON.stringify($("#Treatment_Anamnesis").val().split('\n'));
+        //var observations = JSON.stringify($("#Treatment_Observations").val().split('\n'));
+        //var anamnesis = JSON.stringify($("#Treatment_Anamnesis").val().split('\n'));
+        var observations = $("#Treatment_Observations");
+        var anamnesis = $("#Treatment_Anamnesis");
+
+        var observationsAsJson = JSON.stringify(observations.val().substr(0, observations.selectionStart).split("\n"));
+        var anamnesisAsJson = JSON.stringify(anamnesis.val().substr(0, anamnesis.selectionStart).split("\n"));
+        var treatmentId = $("#Treatment_TreatmentId").val();
+
+        //$("#Treatment_Observations").val().substr(0,$("#Treatment_Observations").selectionStart).split("\n")
 
         console.log(afflication);
 
@@ -112,8 +211,9 @@
             url: "/api/treatment/savetreatment/",
             data: {
                 Afflication: afflication,
-                Observations: observations,
-                Anamnesis: anamnesis
+                Observations: observationsAsJson,
+                Anamnesis: anamnesisAsJson,
+                TreatmentId: treatmentId
             }
         })
         .done(function (data) {
@@ -173,6 +273,18 @@
     
     $(document).ready(function () {
 
+        $('#treatmentModal').modal({ backdrop: 'static', keyboard: false });
+        $('#treatmentModal').modal("hide");
+
+        buttonType = ButtonTypeEnum.MEDIUM;
+
+        var form_modified = false;
+
+        //$(window).bind('beforeunload', function () {
+        //    $('treatmentModal').modal('show');
+        //    return 'Are you sure you want to leave?';
+        //});
+
         $(function() {
             $( "#datepicker" ).datepicker({  maxDate: new Date() });
         });
@@ -204,7 +316,7 @@
 
         base_image.src = img;
 
-        resizeCanvasImage(base_image, canvas, 800, 400);
+        resizeCanvasImage(base_image, canvas, 800, 467);
     };
 
     function setPersistedCrosses() {
@@ -406,5 +518,12 @@
             y: evt.clientY - rect.top
         };
     }
+
+    //window.addEventListener("beforeunload", function (e) {
+    //    $("#treatmentModal").modal("show");
+
+    //    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+    //    return confirmationMessage;                            //Webkit, Safari, Chrome
+    //});
 
 </script>

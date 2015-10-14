@@ -10,7 +10,7 @@ namespace MuscleTherapyJournal.Models
         public string AfflictionAreas { get; set; }
         [Column(TypeName = "date"), DataType(DataType.Date), 
         Display(Name = "Behandling dato")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public string CreatedDate { get; set; }
+        public string FullAddress { get; set; }
     }
 }

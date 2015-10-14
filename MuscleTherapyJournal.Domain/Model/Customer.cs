@@ -14,6 +14,7 @@ namespace MuscleTherapyJournal.Domain.Model
         public string Surname { get; set; }
         [DisplayName("Etternavn")]
         public string LastName { get; set; }
+        [DisplayName("Navn")]
         public string CustomerName { get; set; }
         [DisplayName("Telefonnummer")]
         public string MobilePhoneNumber { get; set; }
@@ -31,6 +32,8 @@ namespace MuscleTherapyJournal.Domain.Model
         public string Profession { get; set; }
         [DisplayName("Fornavn")]
         public DateTime CreatedDate { get; set; }
+        [DisplayName("Alder")]
+        public int Age { get; set; }
 
         public override string ToString()
         {

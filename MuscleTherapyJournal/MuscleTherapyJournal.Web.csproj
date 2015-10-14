@@ -344,7 +344,7 @@
     <Content Include="Views\Treatment\Treatment.cshtml" />
     <Content Include="Views\Customer\UpdateCustomer.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
-    <Content Include="Views\Shared\_ModalUpdateCustomer.cshtml" />
+    <Content Include="Views\Shared\_ModalTreatment.cshtml" />
     <Content Include="Views\Search\_ResultCustomerSearch.cshtml" />
     <Content Include="Views\Search\_ResultTreatmentSearch.cshtml" />
     <Content Include="Views\Search\_ChooseSearchType.cshtml" />

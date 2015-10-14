@@ -70,6 +70,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DapperConnectionSingleton.cs" />
+    <Compile Include="Migrations\201510141808094_DateTimeNullable.cs" />
+    <Compile Include="Migrations\201510141808094_DateTimeNullable.Designer.cs">
+      <DependentUpon>201510141808094_DateTimeNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="RelationshipEntities\TreatmentCustomerEntity.cs" />
     <Compile Include="Repositories\AreaAfflicationRepository.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
@@ -194,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510091156151_SetBirthDateNullable.resx">
       <DependentUpon>201510091156151_SetBirthDateNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510141808094_DateTimeNullable.resx">
+      <DependentUpon>201510141808094_DateTimeNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

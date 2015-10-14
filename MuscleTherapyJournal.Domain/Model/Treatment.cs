@@ -12,13 +12,17 @@ namespace MuscleTherapyJournal.Domain.Model
 
         public int TreatmentId { get; set; }
         public int CustomerId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ChangedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? ChangedDate { get; set; }
         public int UserId { get; set; }
+        [DisplayName("Anamnese:")]
         public string Anamnesis { get; set; }
+        [DisplayName("Observasjoner:")]
         public string Observations { get; set; }
         public Customer Customer { get; set; }
         public User User { get; set; }
+
+        [DisplayName("Bilde over smerteområde:")]
         public List<AfflictionArea> AfflictionAreas { get; set; }
 
         public override string ToString()

@@ -27,6 +27,7 @@
   max-height: 150px;
   min-height: 150px;
   bottom: auto;
+  border: none;
 }
 .vcenter {
   display: inline-block;
@@ -48,4 +49,20 @@
 .myrow p:last-child {
   margin-bottom: 0;
   /* optional */
+}
+.vertical-alignment-helper {
+  display: table;
+  height: 100%;
+  pointer-events: none;
+}
+.vertical-align-center {
+  display: table-cell;
+  vertical-align: middle;
+  pointer-events: none;
+}
+.modal-content {
+  width: 400px;
+  height: inherit;
+  margin: 0 auto;
+  pointer-events: all;
 }
