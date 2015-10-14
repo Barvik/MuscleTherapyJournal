@@ -1,8 +1,38 @@
-﻿@model PagedList.PagedList<MuscleTherapyJournal.Domain.Model.Treatment>
+﻿@using MuscleTherapyJournal.Domain.Enum
+@using PagedList.Mvc
+@model MuscleTherapyJournal.Models.SearchViewModel
 
-@if (Model.Any())
+@if (Model.ResultTreatmentSearch.Any())
 {
     <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="vcenter">
+                Viser @Model.ResultTreatmentSearch.FirstItemOnPage til @Model.ResultTreatmentSearch.LastItemOnPage av totalt @Model.ResultTreatmentSearch.TotalItemCount behandlinger.
+
+            </div>
+
+            <div class="pull-right">
+                @Html.PagedListPager(Model.ResultTreatmentSearch, page => Url.Action("SearchResult",
+            new
+            {
+                page,
+                pageSize = Model.ResultTreatmentSearch.PageSize,
+                changedPage = true,
+                pageSearchType = (int)SearchType.TreatmentSearch,
+                customerName = Model.SearchParameters.CustomerName,
+                phoneNumber = Model.SearchParameters.PhoneNumber,
+                customerNumber = Model.SearchParameters.CustomerNumber,
+                treatmentFromDate = Model.SearchParameters.TreatmentFromDate,
+                treatmentToDate = Model.SearchParameters.TreatmentToDate,
+                profession = Model.SearchParameters.Profession
+            }))
+
+            </div>
+        </div>
+    </div>
 
     <table class="table">
         <thead>
@@ -12,27 +42,30 @@
                 <th>Telefonnummer</th>
                 <th>Fødselsdato</th>
                 <th>Behandling dato</th>
+                <th>Yrke</th>
             </tr>
         </thead>
 
         <tbody>
-            @foreach (var treatment in Model)
+            @foreach (var treatmentCustomer in Model.ResultTreatmentSearch)
             {
                 <tr>
                     <td>
-                        <a class="btn btn-primary" href="@Url.Action("Treatment", "Treatment")">
+                        <a title="Ny behandling" class="btn btn-primary" href="@Url.Action("Treatment", "Treatment")">
                             <i class="fa fa-plus"></i>
                         </a>
                     </td>
 
-                    <td>@treatment.Customer.CustomerName</td>
-                    <td>@treatment.Customer.MobilePhoneNumber</td>
-                    <td>@treatment.Customer.BirthDay.GetValueOrDefault().ToString("dd.MM.yyyy")</td>
-                    <td>@treatment.CreatedDate.ToString("dd.MM.yyyy")</td>
+                    <td>@treatmentCustomer.CustomerName</td>
+                    <td>@treatmentCustomer.MobilePhoneNumber</td>
+                    <td>@treatmentCustomer.BirthDay.GetValueOrDefault().ToString("dd.MM.yyyy")</td>
+                    <td>@treatmentCustomer.TreatmentCreatedDate.ToString("dd.MM.yyyy")</td>
+                    <td>@treatmentCustomer.Profession</td>
                     <td class="right">
-                        <div class="btn btn-default" data-placement="top" rel="tooltip">
+                        <a title="Endre behandling" class="btn btn-success" data-placement="top" rel="tooltip"
+                           href="@Url.Action("Treatment", "Treatment", new { treatmentId = @treatmentCustomer.TreatmentId })">
                             <i class="fa fa-edit"></i>
-                        </div>
+                        </a>
                     </td>
                 </tr>
             }
@@ -41,5 +74,6 @@
 }
 else
 {
-    <div class="alert alert-info" role="alert">Kunne ikke finne noen behandlinger</div>
+    <br />
+    <div class="alert alert-info" role="alert">Kunne ikke finne noen behandlinger på dine søkekriterier</div>
 }

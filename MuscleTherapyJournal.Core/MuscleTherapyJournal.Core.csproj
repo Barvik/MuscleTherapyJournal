@@ -67,6 +67,7 @@
     <Compile Include="Services\Interfaces\ICustomerService.cs" />
     <Compile Include="Services\Interfaces\ITreatmentService.cs" />
     <Compile Include="Services\TreatmentService.cs" />
+    <Compile Include="Utility\DateTimeParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

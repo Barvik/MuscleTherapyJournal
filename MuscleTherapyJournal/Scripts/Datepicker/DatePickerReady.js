@@ -7,6 +7,8 @@
         yearRange: "-100:+0",
         changeYear: true,
         maxDate: new Date,
+        showOn: "button",
+        buttonText : "<i class='fa fa-calendar'></i>",
         monthNames: ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"],
         monthNamesShort: ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"],
         dayNamesShort: ["søn", "man", "tir", "ons", "tor", "fre", "lør"],

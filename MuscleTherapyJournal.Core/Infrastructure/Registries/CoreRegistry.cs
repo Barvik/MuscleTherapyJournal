@@ -14,7 +14,7 @@ namespace MuscleTherapyJournal.Core.Infrastructure.Registries
         {
             For<ITreatmentService>().Use<TreatmentService>();
 
-            For<ITreatmentDAO>().Use<TreatmentDAO>();
+            For<ITreatmentRepository>().Use<TreatmentRepository>();
 
             For<ITreatmentFactory>().Use<TreatmentFactory>();
         }

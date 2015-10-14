@@ -1,48 +1,66 @@
-﻿@using PagedList.Mvc
-@model PagedList.PagedList<MuscleTherapyJournal.Domain.Model.Customer>
+﻿@using MuscleTherapyJournal.Domain.Enum
+@using MuscleTherapyJournal.Domain.Search
+@using PagedList
+@using PagedList.Mvc
+@*@model PagedList.PagedList<MuscleTherapyJournal.Domain.Model.Customer>*@
+@model MuscleTherapyJournal.Models.SearchViewModel
 
-@if (Model.Any())
+@if (Model.ResultCustomerSearch.Any())
 {
     <hr />
+        
     
     <div class="row">
         <div class="col-md-12">
             <div class="vcenter">
-                Viser @Model.FirstItemOnPage til @Model.LastItemOnPage av totalt @Model.TotalItemCount kunder.
+                Viser @Model.ResultCustomerSearch.FirstItemOnPage til @Model.ResultCustomerSearch.LastItemOnPage av totalt @Model.ResultCustomerSearch.TotalItemCount kunder.
 
             </div>
 
             <div class="pull-right">
-                @Html.PagedListPager(Model, page => Url.Action("SearchResult",
-                new { page, pageSize = Model.PageSize }))
-
+                @Html.PagedListPager((IPagedList)Model.ResultCustomerSearch, page => 
+                    Url.Action("SearchResult", new
+                    {
+                        page, 
+                        pageSize = Model.ResultCustomerSearch.PageSize,
+                        changedPage = true,
+                        pageSearchType = (int) SearchType.CustomerSearch,
+                        customerName = Model.SearchParameters.CustomerName,
+                        phoneNumber = Model.SearchParameters.PhoneNumber,
+                        customerNumber = Model.SearchParameters.CustomerNumber,
+                        treatmentFromDate = Model.SearchParameters.TreatmentFromDate,
+                        treatmentToDate = Model.SearchParameters.TreatmentToDate,
+                        profession = Model.SearchParameters.Profession
+                    }))
             </div>
         </div>
     </div>
-    
-    <table class="table table-bordered">
+
+    <table class="table table-striped" data-sort-name="customernumber" data-sort-order="desc">
         <thead>
             <tr>
-                <th></th>
-                <th>Fornavn</th>
-                <th>Etternavn</th>
-                <th>Telefonnummer</th>
-                <th>Fødselsdato</th>
+                <th data-field=""></th>
+                <th data-field="customernumber" data-sortable="true">Kundenr</th>
+                <th data-field="firstname" data-sortable="true">Fornavn</th>
+                <th data-field="lastname" data-sortable="true">Etternavn</th>
+                <th data-field="phonenumber" data-sortable="true">Telefonnummer</th>
+                <th data-field="birthday" data-sortable="true">Fødselsdato</th>
                 <th></th>
             </tr>
         </thead>
-        
+
         <tbody>
-            @foreach (var customer in Model)
-            {   
+            @foreach (var customer in Model.ResultCustomerSearch)
+            {
                 <tr>
                     <td>
-                        <a title="Ny behandling" class="btn btn-primary" data-toggle="tooltip" data-placement="top" 
-                           href="@Url.Action("Treatment", "Treatment")">
+                        <a title="Ny behandling" class="btn btn-primary" data-toggle="tooltip" data-placement="top"
+                           href="@Url.Action("Treatment", "Treatment", new { customerId = customer.CustomerId })">
                             <i class="fa fa-plus"></i>
                         </a>
                     </td>
 
+                    <td>@customer.CustomerId</td>
                     <td>@customer.FirstName</td>
                     <td>@customer.LastName</td>
                     <td>@customer.MobilePhoneNumber</td>
@@ -60,5 +78,6 @@
 }
 else
 {
-    <div class="alert alert-info" role="alert">Kunne ikke finne noen kunder</div>
+    <br/>
+    <div class="alert alert-info" role="alert">Kunne ikke finne kunder på dine søkekriterier</div>
 }

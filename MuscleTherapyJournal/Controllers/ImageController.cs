@@ -18,8 +18,11 @@ namespace MuscleTherapyJournal.Controllers
             byte[] data = new byte[(int)fileStream.Length];
             fileStream.Read(data, 0, data.Length);
  
-            return Json(new { base64imgage =  Convert.ToBase64String(data) }
+            var result = Json(new { base64imgage =  Convert.ToBase64String(data) }
                 , JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+
+            return result;
         } 
     }
 }

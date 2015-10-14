@@ -4,6 +4,7 @@ using AutoMapper;
 using log4net;
 using MuscleTherapyJournal.Core.Services.Interfaces;
 using MuscleTherapyJournal.Domain.Model;
+using MuscleTherapyJournal.Domain.Search;
 using MuscleTherapyJournal.Persitance.DAO.Interfaces;
 using MuscleTherapyJournal.Persitance.Entity;
 
@@ -12,16 +13,16 @@ namespace MuscleTherapyJournal.Core.Services
     public class CustomerService : ICustomerService
     {
         private readonly IMappingEngine _mappingEngine;
-        private readonly ICustomerDAO _customerDao;
+        private readonly ICustomerRepository _customerRepository;
         private readonly ILog _logger = LogManager.GetLogger(typeof (CustomerService));
 
-        public CustomerService(IMappingEngine mappingEngine, ICustomerDAO customerDao)
+        public CustomerService(IMappingEngine mappingEngine, ICustomerRepository customerRepository)
         {
             if (mappingEngine == null) throw new ArgumentNullException("mappingEngine");
-            if (customerDao == null) throw new ArgumentNullException("customerDao");
+            if (customerRepository == null) throw new ArgumentNullException("customerRepository");
 
             _mappingEngine = mappingEngine;
-            _customerDao = customerDao;
+            _customerRepository = customerRepository;
         }
 
         public bool UpdateCustomer(Customer customer)
@@ -54,7 +55,7 @@ namespace MuscleTherapyJournal.Core.Services
 
             try
             {
-                var result = _customerDao.GetCustomerByCustomerId(customerId);
+                var result = _customerRepository.GetCustomerByCustomerId(customerId);
                 return _mappingEngine.Map<Customer>(result);
             }
             catch (Exception ex)
@@ -71,7 +72,7 @@ namespace MuscleTherapyJournal.Core.Services
 
             try
             {
-                var result = _customerDao.GetAllCustomers();
+                var result = _customerRepository.GetAllCustomers();
                 return _mappingEngine.Map<List<Customer>>(result);
             }
             catch (Exception ex)
@@ -79,6 +80,22 @@ namespace MuscleTherapyJournal.Core.Services
                 _logger.ErrorFormat("Exception when calling GetAllCustomers: {0}", ex);
             }
             return new List<Customer>();
+        }
+
+        public List<Customer> GetCustomersBySearchCriteria(SearchParameters searchParameters)
+        {
+            _logger.DebugFormat("Recieved GetCustomersBySearchCriteria with searchCritera: {0}", searchParameters);
+
+            try
+            {
+                var result = _customerRepository.GetCustomerBySearchParameters(searchParameters);
+                return _mappingEngine.Map<List<Customer>>(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorFormat("Exception when calling GetCustomersBySearchCriteria: {0}", ex);
+            }
+            return null;
         }
 
         #region "Private_Methods"
@@ -104,7 +121,7 @@ namespace MuscleTherapyJournal.Core.Services
         {
             try
             {
-                _customerDao.UpdateExistingCustomer(customer);
+                _customerRepository.UpdateExistingCustomer(customer);
                 return true;
             }
             catch (Exception ex)
@@ -118,7 +135,7 @@ namespace MuscleTherapyJournal.Core.Services
         {
             try
             {
-                _customerDao.UpdateNewCustomer(customer);
+                _customerRepository.UpdateNewCustomer(customer);
                 return true;
             }
             catch (Exception ex)

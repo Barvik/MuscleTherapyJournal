@@ -27,15 +27,15 @@ namespace MuscleTherapyJournal.Controllers
         }
 
         [HttpGet]
-        [Route("Behandling/{behandlingId}{customerId}")]
-        public ActionResult Treatment(int behandlingId = 0, string customerId = null)
+        [Route("Behandling/{treatmentId}{customerId}")]
+        public ActionResult Treatment(int treatmentId = 0, int customerId = 0)
         {
-            _logger.DebugFormat("Enter TreatmentController with behandingId: {0}", behandlingId);
+            _logger.DebugFormat("Enter TreatmentController with behandingId: {0}", treatmentId);
             var model = new TreatmentViewModel();
 
-            if (behandlingId > 0)
+            if (treatmentId > 0)
             {
-                var treatment = _treatmentService.GetTreatmentById(behandlingId);
+                var treatment = _treatmentService.GetTreatmentById(treatmentId);
 
                 model = new TreatmentViewModel
                 {

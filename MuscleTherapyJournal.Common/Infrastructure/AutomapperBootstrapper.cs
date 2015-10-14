@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MuscleTherapyJournal.Domain.Model;
 using MuscleTherapyJournal.Persitance.Entity;
+using MuscleTherapyJournal.Persitance.RelationshipEntities;
 
 namespace MuscleTherapyJournal.Common.Infrastructure
 {
@@ -22,6 +23,13 @@ namespace MuscleTherapyJournal.Common.Infrastructure
 
             Mapper.CreateMap<Treatment, TreatmentEntity>();
             Mapper.CreateMap<TreatmentEntity, Treatment>();
+
+            Mapper.CreateMap<TreatmentCustomerEntity, TreatmentCustomer>();
+            Mapper.CreateMap<TreatmentCustomer, TreatmentCustomerEntity>();
+
+
+            Mapper.CreateMap<TreatmentCustomerEntity[], TreatmentCustomer[]>();
+            Mapper.CreateMap<TreatmentCustomer[], TreatmentCustomerEntity[]>();
         }
     }
 }

@@ -34,6 +34,10 @@
       <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -56,6 +60,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,12 +69,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAO\AreaAfflicationDAO.cs" />
-    <Compile Include="DAO\CustomerDAO.cs" />
-    <Compile Include="DAO\Interfaces\IAreaAfflicationDAO.cs" />
-    <Compile Include="DAO\Interfaces\ICustomerDAO.cs" />
-    <Compile Include="DAO\Interfaces\ITreatmentDAO.cs" />
-    <Compile Include="DAO\TreatmentDAO.cs" />
+    <Compile Include="DapperConnectionSingleton.cs" />
+    <Compile Include="RelationshipEntities\TreatmentCustomerEntity.cs" />
+    <Compile Include="Repositories\AreaAfflicationRepository.cs" />
+    <Compile Include="Repositories\CustomerRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IAreaAfflicationRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICustomerRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ITreatmentRepository.cs" />
+    <Compile Include="Repositories\TreatmentRepository.cs" />
     <Compile Include="Entity\AfflictionAreaEntity.cs" />
     <Compile Include="Entity\CustomerEntity.cs" />
     <Compile Include="Entity\TreatmentEntity.cs" />
@@ -188,6 +195,12 @@
     <EmbeddedResource Include="Migrations\201510091156151_SetBirthDateNullable.resx">
       <DependentUpon>201510091156151_SetBirthDateNullable.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MuscleTherapyJournal.Domain\MuscleTherapyJournal.Domain.csproj">
+      <Project>{2B30E945-8C7B-4BFB-ADD4-3172F7974DBB}</Project>
+      <Name>MuscleTherapyJournal.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

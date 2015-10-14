@@ -6,9 +6,9 @@ using MuscleTherapyJournal.Persitance.Entity;
 
 namespace MuscleTherapyJournal.Persitance.DAO
 {
-    public class AreaAfflicationDAO : IAreaAfflicationDAO
+    public class AreaAfflicationRepository : IAreaAfflicationRepository
     {
-        private readonly ILog _logger = LogManager.GetLogger(typeof(TreatmentDAO));
+        private readonly ILog _logger = LogManager.GetLogger(typeof(TreatmentRepository));
 
         public List<AfflictionAreaEntity> GetAfflicationAreas(int treatmentId)
         {
