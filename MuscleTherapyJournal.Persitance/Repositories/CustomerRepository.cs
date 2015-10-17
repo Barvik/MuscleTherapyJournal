@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
@@ -30,6 +31,7 @@ namespace MuscleTherapyJournal.Persitance.DAO
             using (var db = new MuscleTherapyContext())
             {
                 db.Customers.Attach(customer);
+                db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
             }
         }

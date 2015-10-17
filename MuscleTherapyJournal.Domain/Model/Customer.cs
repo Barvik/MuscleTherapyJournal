@@ -8,15 +8,19 @@ namespace MuscleTherapyJournal.Domain.Model
     {
         public int CustomerId { get; set; }
         [DisplayName("Fornavn")]
-        [Required(ErrorMessage = "Fornavn må fylles ut.")]
+        [Required(ErrorMessage = "Navn er påkrevd")]
+        [RegularExpression("^[a-zA-Z ]+$", ErrorMessage = "Angi ett gyldig fornavn")]
         public string FirstName { get; set; }
         [DisplayName("Mellomnavn")]
         public string Surname { get; set; }
         [DisplayName("Etternavn")]
+        [Required(ErrorMessage = "Etternavn er påkrevd")]
         public string LastName { get; set; }
         [DisplayName("Navn")]
         public string CustomerName { get; set; }
         [DisplayName("Telefonnummer")]
+        [Required(ErrorMessage = "Telefonnummer er påkrevd")]
+        [RegularExpression("^[^+][0-9]*$", ErrorMessage = "Angi et gyldig nummer")]
         public string MobilePhoneNumber { get; set; }
         [DisplayName("Fødselsdato")]
         public DateTime? BirthDay { get; set; }
@@ -27,6 +31,7 @@ namespace MuscleTherapyJournal.Domain.Model
         [DisplayName("Sted")]
         public string LivingLocation { get; set; }
         [DisplayName("E-post")]
+        [RegularExpression("^[^@]+@[^@]+\\.[^@]+$", ErrorMessage = "Ugyldig format på epost")]
         public string Email { get; set; }
         [DisplayName("Yrke")]
         public string Profession { get; set; }

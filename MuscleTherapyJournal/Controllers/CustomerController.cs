@@ -78,6 +78,7 @@ namespace MuscleTherapyJournal.Controllers
             }
             model.UpdateCustomerSuccess = _customerService.UpdateCustomer(model.Customer);
 
+
             return View(model);
         }
     }

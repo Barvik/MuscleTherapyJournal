@@ -12,19 +12,22 @@
         <hr/>
         @Html.ValidationSummary(true)
         
-        @Html.HiddenFor(model => model.IsPostBack)
+        <input type="hidden" id="IsFormPostBack" data-something="@Model.IsPostBack" value="@Model.IsPostBack.ToString()" />
+        <input type="hidden" id="IsUpdateCustomerSuccess" data-something="@Model.UpdateCustomerSuccess" value="@Model.UpdateCustomerSuccess.ToString()" />
+        @Html.HiddenFor(model => model.Customer.CustomerId)
+        @Html.HiddenFor(model => model.Customer.CreatedDate)
 
         <div class="row" id="customerPersist">
             <div class="col-md-8">
                 @if (Model.UpdateCustomerSuccess)
                 {
-                    <div class="alert alert-success" role="alert">
+                    <div class="alert alert-success update-message" role="alert">
                         @Model.Customer.CustomerName ble lagret i databasen.
                     </div>
                 }
                 else
                 {
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-danger update-message" role="alert">
                         Det skjedde en feil, <b>@Model.Customer.CustomerName</b> ble ikke lagret i databasen. Vennligst prøv igjen.
                     </div>
                 }
@@ -36,10 +39,10 @@
 
         <div class="row">
             <div class="col-md-4">
+                @Html.LabelFor(model => model.Customer.FirstName, new { @class = "control-label" })
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Customer.FirstName, new { @class = "control-label" })
-                    @Html.TextBoxFor(model => model.Customer.FirstName, new { @class = "form-control" , Name = "firstname" })
-                    @Html.ValidationMessageFor(model => model.Customer.FirstName, null, new { @class = "help-block" })
+                    @Html.TextBoxFor(model => model.Customer.FirstName, new { @class = "form-control", @type = "text" })
+                    @Html.ValidationMessageFor(model => model.Customer.FirstName, null, new { @class = "has-error" })
                 </div>
 
                 <div class="form-group">
@@ -50,11 +53,13 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Customer.LastName, new { @class = "control-label" })
                     @Html.TextBoxFor(model => model.Customer.LastName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Customer.LastName)
                 </div>
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Customer.MobilePhoneNumber, new { @class = "control-label" })
                     @Html.TextBoxFor(model => model.Customer.MobilePhoneNumber, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Customer.MobilePhoneNumber)
                 </div>
                 
                 <div class="form-group">
@@ -89,6 +94,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Customer.Email, new { @class = "control-label" })
                     @Html.TextBoxFor(model => model.Customer.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Customer.Email)
                 </div>
             </div>
 
@@ -102,19 +108,20 @@
             </div>
             <div class="col-md-4">
                 <div class="btn-group">
-                    <button class="btn btn-default">Avbryt</button>
                     @if (Model.Customer.CustomerId > 0)
                     {
-                        <button class="btn btn-primary" id="saveCustomer">
+                        <a class="btn btn-default" href="@Url.Action("UpdateCustomer", "Customer")">Ny Kunde</a>
+                        <button type="submit" class="btn btn-primary" id="saveCustomer">
                             <i class="fa fa-floppy-o"></i>
                             Oppdater Kunde
                         </button>
                     }
                     else
                     {
-                        <button class="btn btn-primary" id="saveCustomer">
+                        <a class="btn btn-default" href="@Url.Action("Index", "Search")">Avbryt</a>
+                        <button type="submit" class="btn btn-primary" id="saveCustomer">
                             <i class="fa fa-floppy-o"></i>
-                            Lagre Kunde
+                            Lagre Ny Kunde
                         </button>
                     }
                     
@@ -124,47 +131,117 @@
     </div>
 }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
-
 <script type="text/javascript">
+
     $(document).ready(function () {
 
-        var isPostBack = $("#IsPostBack").val();
-        console.log(isPostBack);
+        var isPostBack = ($("#IsFormPostBack").val() === "True");
+        console.log($("#IsFormPostBack").val() + " " + isPostBack);
 
-        $("#customerPersist").hide();
-
-        if (isPostBack) {
-            $("#customerPersist").show();
+        if (!isPostBack) {
+            $(".update-message").hide();
         }
 
-        $("#customerForm").validate({
-            rules: {
-                firstname: {
-                    minlength: 3,  // <- here
-                    maxlength: 15,
-                    required: true
-                },
-            },
-            messages: {
-                firstname: "Fornavn er påkrevd"
-            }
+        if (isPostBack && ($("#IsUpdateCustomerSuccess").val()) === "True") {
+            setAllFieldsEmpty();
+        }
+
+        if (isPostBack) {
+            setTimeout(function () {
+                $(".update-message").fadeOut('fast');
+            }, 5000);
+        }
+
+        $("#Customer_FirstName").blur(function () {
+            var firstName = returnNameToUpperCase($("#Customer_FirstName").val());
+            setFirstNameValue(firstName);
         });
 
-        $("#saveCustomer").click(function() {
-            if ($("customerForm").valid()) {
-                $("#customerForm").submit(function () {
-                                console.log("Success");
-                            });
-            }
+        $("#Customer_Surname").blur(function () {
+            var surName = returnNameToUpperCase($("#Customer_Surname").val());
+            setSurNameValue(surName);
         });
 
-        $("#showDatePicker").click(function() {
-            $(".datefield").datepicker("show");
+        $("#Customer_LastName").blur(function () {
+            var lastName = returnNameToUpperCase($("#Customer_LastName").val());
+            setLastNameValue(lastName);
         });
+
+        $("#Customer_Address").blur(function () {
+            var address = returnNameToUpperCase($("#Customer_Address").val());
+            setAddressValue(address);
+        });
+
+        $("#Customer_LivingLocation").blur(function () {
+            var livingLocation = returnNameToUpperCase($("#Customer_LivingLocation").val());
+            setLivingLocationValue(livingLocation);
+        });
+
+        $("#Customer_Profession").blur(function () {
+            var profession = returnNameToUpperCase($("#Customer_Profession").val());
+            setProfessionValue(profession);
+        });
+
+        function setAllFieldsEmpty() {
+            setFirstNameValue("");
+            setSurNameValue("");
+            setLastNameValue("");
+            setAddressValue("");
+            setLivingLocationValue("");
+            setProfessionValue("");
+            setEmailValue("");
+            setBirthdayValue("");
+            setZipCodeValue("");
+            setPhoneNumberValue("");
+        }
+
+        function setFirstNameValue(value) {
+            $("#Customer_FirstName").val(value);
+        }
+
+        function setSurNameValue(value) {
+            $("#Customer_Surname").val(value);
+        }
+
+        function setLastNameValue(value) {
+            $("#Customer_LastName").val(value);
+        }
+
+        function setAddressValue(value) {
+            $("#Customer_Address").val(value);
+        }
+
+        function setLivingLocationValue(value) {
+            $("#Customer_LivingLocation").val(value);
+        }
+
+        function setProfessionValue(value) {
+            $("#Customer_Profession").val(value);
+        }
+
+        function setEmailValue(value) {
+            $("#Customer_Email").val(value);
+        }
+
+        function setBirthdayValue(value) {
+            $("#BirthDay").val(value);
+        }
+
+        function setZipCodeValue(value) {
+            $("#Customer_ZipCode").val(value);
+        }
+
+        function setPhoneNumberValue(value) {
+            $("#Customer_MobilePhoneNumber").val(value);
+        }
     });
 
-   
+
+    function returnNameToUpperCase(textBoxValue) {
+        console.log(textBoxValue);
+        return textBoxValue.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+            return letter.toUpperCase();
+        });
+    }
+
 </script>
