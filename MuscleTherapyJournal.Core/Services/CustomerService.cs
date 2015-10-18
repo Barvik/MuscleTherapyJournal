@@ -14,15 +14,24 @@ namespace MuscleTherapyJournal.Core.Services
     {
         private readonly IMappingEngine _mappingEngine;
         private readonly ICustomerRepository _customerRepository;
+        private readonly ITreatmentRepository _treatmentRepository;
+        private readonly IAreaAfflicationRepository _areaAfflicationRepository;
         private readonly ILog _logger = LogManager.GetLogger(typeof (CustomerService));
 
-        public CustomerService(IMappingEngine mappingEngine, ICustomerRepository customerRepository)
+        public CustomerService(IMappingEngine mappingEngine, 
+            ICustomerRepository customerRepository, 
+            ITreatmentRepository treatmentRepository, 
+            IAreaAfflicationRepository areaAfflicationRepository)
         {
             if (mappingEngine == null) throw new ArgumentNullException("mappingEngine");
             if (customerRepository == null) throw new ArgumentNullException("customerRepository");
+            if (treatmentRepository == null) throw new ArgumentNullException("treatmentRepository");
+            if (areaAfflicationRepository == null) throw new ArgumentNullException("areaAfflicationRepository");
 
             _mappingEngine = mappingEngine;
             _customerRepository = customerRepository;
+            _treatmentRepository = treatmentRepository;
+            _areaAfflicationRepository = areaAfflicationRepository;
         }
 
         public bool UpdateCustomer(Customer customer)
@@ -97,6 +106,33 @@ namespace MuscleTherapyJournal.Core.Services
             }
             return null;
         }
+
+        public List<OldAfflications> GetOldAfflicationsByCustomerId(int customerId)
+        {
+            try
+            {
+                var result = new List<OldAfflications>();
+                var oldTreatments = _treatmentRepository.GetTreatmentsByCustomerId(customerId);
+                foreach (var treatment in oldTreatments)
+                {
+                    var afflications = _areaAfflicationRepository.GetAfflicationAreas(treatment.TreatmentId);
+                    var mappedAfflications = _mappingEngine.Map<List<AfflictionArea>>(afflications);
+
+                    var oldAfflication = new OldAfflications
+                    {
+                        Afflications = mappedAfflications,
+                        TreatmentDate = treatment.CreatedDate.GetValueOrDefault()
+                    };
+                    result.Add(oldAfflication);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorFormat("Exception when retrieving old afflications for customerId: {0} with exception: {1}", customerId, ex);
+                return null;
+            }
+        } 
 
         #region "Private_Methods"
 

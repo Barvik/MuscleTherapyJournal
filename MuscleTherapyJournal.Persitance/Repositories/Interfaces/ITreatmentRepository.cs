@@ -11,5 +11,6 @@ namespace MuscleTherapyJournal.Persitance.DAO.Interfaces
         void CreateTreatment(TreatmentEntity treatment);
         TreatmentEntity GetTreatment(int treatmentId);
         List<TreatmentCustomerEntity> GetTreatmentsBySearchCriteria(SearchParameters searchParameters, DateTime fromDate, DateTime toDate);
+        List<TreatmentEntity> GetTreatmentsByCustomerId(int customerId);
     }
 }

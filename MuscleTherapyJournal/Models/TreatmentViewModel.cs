@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MuscleTherapyJournal.Domain.Model;
 
@@ -12,5 +13,6 @@ namespace MuscleTherapyJournal.Models
         Display(Name = "Behandling dato")]
         public string CreatedDate { get; set; }
         public string FullAddress { get; set; }
+        public List<OldAfflications> OldAfflications { get; set; }
     }
 }

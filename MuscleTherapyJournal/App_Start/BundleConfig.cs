@@ -14,6 +14,9 @@ namespace MuscleTherapyJournal
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));
 
+            //bundles.Add(new ScriptBundle("~/bundles/requirejs").Include(
+            //            "~/scripts/require.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate.js"));
 

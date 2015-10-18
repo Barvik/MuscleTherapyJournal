@@ -53,6 +53,8 @@ namespace MuscleTherapyJournal.Core.Services
             _logger.DebugFormat("Entering SaveTreatment with treatMent: {0}", treatmentId);
 
             var areaAfflications = new List<AfflictionArea>();
+            var oldAreaAfflications = new List<OldAfflications>();
+            Treatment result = null;
 
             try
             {
@@ -64,20 +66,24 @@ namespace MuscleTherapyJournal.Core.Services
                 _logger.ErrorFormat("Exception when retrieving afflication for treatmentId: {0} with exception: {1}", treatmentId, ex);
             }
 
-
             try
             {
                 var treatment = _treatmentRepository.GetTreatment(treatmentId);
-                var result = _mappingEngine.Map<Treatment>(treatment);
+                result = _mappingEngine.Map<Treatment>(treatment);
                 result.AfflictionAreas = areaAfflications;
-                return result;
             }
             catch (Exception ex)
             {
                 _logger.ErrorFormat("Exception when retrieving treatmentId: {0} with exception: {1}", treatmentId, ex);
                 return null;
             }
+
+            
+            return result;
+
         }
+
+        
 
         public List<TreatmentCustomer> GetTreatmentsBySearchCriteria(SearchParameters searchParameters)
         {

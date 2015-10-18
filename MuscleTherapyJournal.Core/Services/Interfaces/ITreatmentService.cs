@@ -9,5 +9,6 @@ namespace MuscleTherapyJournal.Core.Services.Interfaces
         bool SaveTreatment(Treatment treatment);
         Treatment GetTreatmentById(int treatmentId);
         List<TreatmentCustomer> GetTreatmentsBySearchCriteria(SearchParameters searchParameters);
+        
     }
 }

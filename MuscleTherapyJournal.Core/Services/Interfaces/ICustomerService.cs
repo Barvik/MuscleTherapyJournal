@@ -11,5 +11,6 @@ namespace MuscleTherapyJournal.Core.Services.Interfaces
         Customer GetCustomer(int customerId);
         List<Customer> GetAllCustomers();
         List<Customer> GetCustomersBySearchCriteria(SearchParameters searchParameters);
+        List<OldAfflications> GetOldAfflicationsByCustomerId(int customerId);
     }
 }

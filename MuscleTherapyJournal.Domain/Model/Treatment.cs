@@ -24,6 +24,7 @@ namespace MuscleTherapyJournal.Domain.Model
 
         [DisplayName("Bilde over smerteområde:")]
         public List<AfflictionArea> AfflictionAreas { get; set; }
+        public List<OldAfflications> OldAfflications { get; set; }
 
         public override string ToString()
         {

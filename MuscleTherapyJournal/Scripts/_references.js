@@ -13,3 +13,7 @@
 /// <reference path="datepicker/datepickerready.js" />
 /// <reference path="bootstrap.validate.js" />
 /// <reference path="jquery.validate.js" />
+/// <reference path="require.js" />
+/// <reference path="r.js" />
+/// <reference path="cfg/require.config.overrides.js" />
+/// <reference path="app/require.config.js" />

@@ -163,7 +163,7 @@
                 </div>
             </div>
         </div>
-        @Html.Partial("_ModalTreatment")
+        @*@Html.Partial("_ModalTreatment")*@
 
 
     </div>
@@ -273,8 +273,8 @@
     
     $(document).ready(function () {
 
-        $('#treatmentModal').modal({ backdrop: 'static', keyboard: false });
-        $('#treatmentModal').modal("hide");
+        //$('#treatmentModal').modal({ backdrop: 'static', keyboard: false });
+        //$('#treatmentModal').modal("hide");
 
         buttonType = ButtonTypeEnum.MEDIUM;
 
@@ -298,7 +298,7 @@
             success: function (data) {
                 imgs = data;
                 setCanvasImage(imgs.base64imgage);
-                setPersistedCrosses();
+                //setPersistedCrosses();
                 
             },
             error: function (xhr) {
@@ -311,6 +311,9 @@
 
     var setCanvasImage = function (base64Data) {
         var base_image = new Image();
+        base_image.onload = new function() {
+
+        };
         var img = "data:image/jpg;base64,"
                  + base64Data;
 
@@ -322,10 +325,8 @@
     function setPersistedCrosses() {
         var persistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.AfflictionAreas));
         if (persistedCrosses.length > 0) {
-
             $.each(persistedCrosses, function() {
                 buttonType = SetButtonTypeEnum(this.CrossSize);
-
                 var crossObject = { mouseXPosition: this.MouseXPosition, 
                     mouseYPosition: this.MouseYPosition, crossSize: this.CrossSize, 
                     buttonType: buttonType, isPersisted : true };
@@ -449,8 +450,6 @@
             var crossObject = { mouseXPosition: pos.x, mouseYPosition: pos.y, 
                 crossSize: buttonType.enumValue, buttonType: buttonType, isPersisted : false };
 
-            console.log(crossObject);
-
             drawnCrosses.push(crossObject);
         }
     }
@@ -501,7 +500,6 @@
 
     function reDrawImageWithRemainingCrosses() {
         setCanvasImage(imgs.base64imgage);
-
         var index;
         for (index = 0; index < drawnCrosses.length; ++index) {
             var mousePosX = drawnCrosses[index].mouseXPosition;
@@ -518,12 +516,4 @@
             y: evt.clientY - rect.top
         };
     }
-
-    //window.addEventListener("beforeunload", function (e) {
-    //    $("#treatmentModal").modal("show");
-
-    //    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-    //    return confirmationMessage;                            //Webkit, Safari, Chrome
-    //});
-
 </script>

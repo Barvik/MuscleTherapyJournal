@@ -40,12 +40,14 @@ namespace MuscleTherapyJournal.Controllers
             {
                 var treatment = _treatmentService.GetTreatmentById(treatmentId);
                 treatment.Customer = _customerService.GetCustomer(treatment.CustomerId);
+
+                var oldAfflicaitons = _customerService.GetOldAfflicationsByCustomerId(treatment.CustomerId);
                 model = new TreatmentViewModel
                 {
-                    Treatment = treatment
+                    Treatment = treatment,
+                    OldAfflications = oldAfflicaitons,
+                    CreatedDate = DateTime.Now.ToString("dd.MM.yyyy")
                 };
-                model.CreatedDate = DateTime.Now.ToString("dd.MM.yyyy");
-                
             }
             else
             {
