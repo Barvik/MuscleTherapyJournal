@@ -51,7 +51,7 @@
             {
                 <tr>
                     <td>
-                        <a title="Ny behandling" class="btn btn-primary" href="@Url.Action("Treatment", "Treatment")">
+                        <a title="Ny behandling" class="btn btn-primary" href="@Url.Action("Treatment", "Treatment", new { customerId = @treatmentCustomer.CustomerId })">
                             <i class="fa fa-plus"></i>
                         </a>
                     </td>

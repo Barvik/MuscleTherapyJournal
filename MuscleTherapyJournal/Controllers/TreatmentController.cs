@@ -48,6 +48,10 @@ namespace MuscleTherapyJournal.Controllers
                     OldAfflications = oldAfflicaitons,
                     CreatedDate = DateTime.Now.ToString("dd.MM.yyyy")
                 };
+                if (oldAfflicaitons.Any())
+                {
+                    model.HasOldAfflications = true;
+                }
             }
             else
             {
@@ -59,6 +63,7 @@ namespace MuscleTherapyJournal.Controllers
                 if (customerId > 0)
                 {
                     model.Treatment.Customer = _customerService.GetCustomer(customerId);
+                    model.Treatment.CustomerId = model.Treatment.Customer.CustomerId;
                 }
             }
 

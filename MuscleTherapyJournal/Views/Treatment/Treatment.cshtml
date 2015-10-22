@@ -10,7 +10,8 @@
 @using (Html.BeginForm("Treatment", "Treatment", FormMethod.Post, new { id = "treatmentForm" }))
 {
     @Html.HiddenFor(model => model.Treatment.TreatmentId)
-    
+    @Html.HiddenFor(model => model.Treatment.CustomerId)
+
     <div class="container">
         <div class="page-header">
             <h1>Journal for @Model.Treatment.Customer.CustomerName
@@ -119,6 +120,26 @@
                         </div>
                     </div>
                     <canvas id="treatmentCanvas"></canvas>
+                    @if (Model.HasOldAfflications)
+                    {
+                        <div class="panel-footer">
+                            <div class="checkbox">
+                                @Html.CheckBox("AllAfflictions", new { id = "ShowAllAfflictions", @checked = true }) Vis alle tidligere behandlinger
+                            </div>
+                            @foreach (var oldAfflication in Model.OldAfflications)
+                            {
+                                <div class="checkbox-inline" id="oldAfflicationsCheckBoxes">
+                                    @Html.CheckBox("Checkbox", new
+                                    {
+                                        id = oldAfflication.TreatmentId,
+                                        @checked = true,
+                                        @class = "old-afflications"
+                                    })
+                                    @oldAfflication.TreatmentDate.ToString("dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("no"))
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
                 
             </div>
@@ -201,6 +222,7 @@
         var observationsAsJson = JSON.stringify(observations.val().substr(0, observations.selectionStart).split("\n"));
         var anamnesisAsJson = JSON.stringify(anamnesis.val().substr(0, anamnesis.selectionStart).split("\n"));
         var treatmentId = $("#Treatment_TreatmentId").val();
+        var customerId = $("#Treatment_CustomerId").val();
 
         //$("#Treatment_Observations").val().substr(0,$("#Treatment_Observations").selectionStart).split("\n")
 
@@ -213,7 +235,8 @@
                 Afflication: afflication,
                 Observations: observationsAsJson,
                 Anamnesis: anamnesisAsJson,
-                TreatmentId: treatmentId
+                TreatmentId: treatmentId,
+                CustomerId: customerId
             }
         })
         .done(function (data) {
@@ -223,6 +246,25 @@
             console.log("Noe gikk galt: ", error);
         });
 
+    });
+
+    $("#ShowAllAfflictions").click(function() {
+        var checkBoxes = $(".old-afflications");
+        var showAfflications = $("#ShowAllAfflictions");
+
+        checkBoxes.each(function (i) {
+            if(showAfflications.prop("checked")){
+                checkBoxes[i].checked = true;
+                //redrawPersistedCrosses();
+            }
+            else{
+                checkBoxes[i].checked = false;
+            }
+        });
+    });
+
+    $(".old-afflications").click(function(checkbox) {
+        console.log("H");
     });
 
     var ButtonTypeEnum = {
@@ -273,9 +315,6 @@
     
     $(document).ready(function () {
 
-        //$('#treatmentModal').modal({ backdrop: 'static', keyboard: false });
-        //$('#treatmentModal').modal("hide");
-
         buttonType = ButtonTypeEnum.MEDIUM;
 
         var form_modified = false;
@@ -298,7 +337,7 @@
             success: function (data) {
                 imgs = data;
                 setCanvasImage(imgs.base64imgage);
-                //setPersistedCrosses();
+                setPersistedCrosses();
                 
             },
             error: function (xhr) {
@@ -307,23 +346,26 @@
             }
         });
 
+
     });
 
     var setCanvasImage = function (base64Data) {
         var base_image = new Image();
-        base_image.onload = new function() {
-
-        };
         var img = "data:image/jpg;base64,"
                  + base64Data;
 
-        base_image.src = img;
-
+        base_image.onload = new function() {
+            base_image.src = img;   
+        };
         resizeCanvasImage(base_image, canvas, 800, 467);
     };
 
     function setPersistedCrosses() {
         var persistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.AfflictionAreas));
+        redrawPersistedCrosses(persistedCrosses);
+    }
+
+    function redrawPersistedCrosses(persistedCrosses){
         if (persistedCrosses.length > 0) {
             $.each(persistedCrosses, function() {
                 buttonType = SetButtonTypeEnum(this.CrossSize);
@@ -343,6 +385,7 @@
     }
 
     function resizeCanvasImage(img, canvas, maxWidth, maxHeight) {
+
         var imgWidth = img.width,
             imgHeight = img.height;
 
@@ -474,7 +517,6 @@
 
     undoButton.click(function () {
         if (drawnCrosses.length != 0) {
-            console.log(drawnCrosses);
             var undoCross = drawnCrosses.pop();
 
             if (!undoCross.isPersisted) {
@@ -510,7 +552,6 @@
 
     function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
-        console.log(rect);
         return {
             x: evt.clientX - rect.left,
             y: evt.clientY - rect.top

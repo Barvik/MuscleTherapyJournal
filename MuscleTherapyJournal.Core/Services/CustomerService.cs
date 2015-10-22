@@ -121,7 +121,8 @@ namespace MuscleTherapyJournal.Core.Services
                     var oldAfflication = new OldAfflications
                     {
                         Afflications = mappedAfflications,
-                        TreatmentDate = treatment.CreatedDate.GetValueOrDefault()
+                        TreatmentDate = treatment.CreatedDate.GetValueOrDefault(),
+                        TreatmentId = treatment.TreatmentId
                     };
                     result.Add(oldAfflication);
                 }
