@@ -13,6 +13,7 @@ namespace MuscleTherapyJournal.Persitance.Entity
         public DateTime? CreatedDate { get; set; }
         public DateTime? ChangedDate { get; set; }
         public int UserId { get; set; }
+        public string TreatmentNotes { get; set; }
         public string Anamnesis { get; set; }
         public string Observations { get; set; }
 

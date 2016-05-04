@@ -6,6 +6,7 @@ namespace MuscleTherapyJournal.Persitance.DAO.Interfaces
     public interface IAreaAfflicationRepository
     {
         List<AfflictionAreaEntity> GetAfflicationAreas(int treatmentId);
+        List<AfflictionAreaEntity> GetAfflicationAreasByCustomerId(int customerId);
     }
 }
 

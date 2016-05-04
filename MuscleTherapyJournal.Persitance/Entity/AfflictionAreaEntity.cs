@@ -13,6 +13,7 @@ namespace MuscleTherapyJournal.Persitance.Entity
         public int CrossSize { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        public int CustomerId { get; set; }
         public int TreatmentId { get; set; }
 
         [ForeignKey("TreatmentId")]

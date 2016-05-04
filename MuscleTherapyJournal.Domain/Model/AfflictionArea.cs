@@ -10,6 +10,8 @@ namespace MuscleTherapyJournal.Domain.Model
         public int CrossSize { get; set; }
         public DateTime CreatedDate { get; set; }
         public int TreatmentId { get; set; }
+        public int CustomerId { get; set; }
+        public bool IsPersisted { get; set; }
 
         public override string ToString()
         {

@@ -6,5 +6,6 @@ namespace MuscleTherapyJournal.Core.Services.Interfaces
     public interface IAreaAfflicationService
     {
         List<AfflictionArea> GetAfflicationAreasByTreatmentId(int treatmendId);
+        List<AfflictionArea> GetAfflicationAreasByCustomerId(int customerId);
     }
 }

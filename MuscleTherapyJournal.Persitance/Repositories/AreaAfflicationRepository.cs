@@ -23,5 +23,19 @@ namespace MuscleTherapyJournal.Persitance.DAO
                 return result.ToList();
             }   
         }
+
+        public List<AfflictionAreaEntity> GetAfflicationAreasByCustomerId(int customerId)
+        {
+            _logger.Debug("GetAfflicationAreas by customerId");
+
+            using (var db = new MuscleTherapyContext())
+            {
+                var result = from AfflictionAreaEntity aae in db.AfflictionAreas
+                             where (aae.CustomerId == customerId)
+                             select aae;
+
+                return result.ToList();
+            } 
+        }
     }
 }

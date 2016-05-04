@@ -110,21 +110,21 @@
             <div class="col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        @Html.LabelFor(model => model.Treatment.AfflictionAreas, new { @class = "control-label" })
+                        @Html.LabelFor(model => model.Treatment.AfflictionAreas, new {@class = "control-label"})
 
                         <div class="btn-group pull-right">
-                            <button title="Undo" type="button" id="undoButton"><img src="/Images/Undo-icon.png" class="canvas-toolbar" /></button>
-                            <button title="Redo" type="button" id="redoButton"><img src="/Images/Redo-icon.png" class="canvas-toolbar" /></button>
-                            <button title="Lite kryss" type="button" id="smallCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-small" /></button>
-                            <button title="Stort kryss" type="button" id="largeCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-large" /></button>
+                            <button title="Undo" type="button" id="undoButton"><img src="/Images/Undo-icon.png" class="canvas-toolbar"/></button>
+                            <button title="Redo" type="button" id="redoButton"><img src="/Images/Redo-icon.png" class="canvas-toolbar"/></button>
+                            <button title="Lite kryss" type="button" id="smallCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-small"/></button>
+                            <button title="Stort kryss" type="button" id="largeCrossButton"><img src="/Images/CrossIcon.png" class="canvas-toolbar-cross-large"/></button>
                         </div>
                     </div>
                     <canvas id="treatmentCanvas"></canvas>
-                    @if (Model.HasOldAfflications)
+                    @*@if (Model.HasOldAfflications)
                     {
                         <div class="panel-footer">
                             <div class="checkbox">
-                                @Html.CheckBox("AllAfflictions", new { id = "ShowAllAfflictions", @checked = true }) Vis alle tidligere behandlinger
+                                @Html.CheckBox("AllAfflictions", new {id = "ShowAllAfflictions", @checked = true}) Vis alle tidligere behandlinger
                             </div>
                             @foreach (var oldAfflication in Model.OldAfflications)
                             {
@@ -139,26 +139,26 @@
                                 </div>
                             }
                         </div>
-                    }
+                    }*@
                 </div>
-                
+
             </div>
             <div class="col-md-7">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        @Html.LabelFor(model => model.Treatment.Anamnesis, new { @class = "control-label" })
+                        @Html.LabelFor(model => model.Treatment.TreatmentNotes, new { @class = "control-label" })
                     </div>
-                    
-                    @Html.TextAreaFor(model => model.Treatment.Anamnesis, new
+
+                    @Html.TextAreaFor(model => model.Treatment.TreatmentNotes, new
                     {
-                        @placeholder = "Legg til Anamnese",
+                        @placeholder = "Legg til behandling",
                         @class = "form-control textarea",
                         @spellcheck = "false",
-                        @style = "font-family: Calibri; width: 100%; max-height: 302,5x; min-height: 302px;"
+                        @style = "font-family: Calibri; width: 100%; max-height: 472px; min-height: 472px;"
                     })
                 </div>
-                
-                <div class="panel panel-default">
+
+                @*<div class="panel panel-default">
                     <div class="panel-heading">
                         @Html.LabelFor(model => model.Treatment.Observations, new { @class = "control-label" })
                     </div>
@@ -170,10 +170,43 @@
                         @class = "form-control textarea",
                         @style = "font-family: Calibri; min-width: 100%; max-height: 102,5px; min-height: 102px;"
                     })
+                </div>*@
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Html.LabelFor(model => model.Treatment.Anamnesis, new { @class = "control-label" })
+                    </div>
+
+                    @Html.TextAreaFor(model => model.Treatment.Anamnesis, new
+                    {
+                        @placeholder = "Legg til Anamnese",
+                        @spellcheck = "false",
+                        @class = "form-control textarea",
+                        @style = "font-family: Calibri; min-width: 100%; max-height: 102px; min-height: 102px;"
+                    })
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Html.LabelFor(model => model.Treatment.Observations, new { @class = "control-label" })
+                    </div>
+
+                    @Html.TextAreaFor(model => model.Treatment.Observations, new
+                    {
+                        @placeholder = "Legg til Observasjoner",
+                        @spellcheck = "false",
+                        @class = "form-control textarea",
+                        @style = "font-family: Calibri; min-width: 100%; max-height: 102px; min-height: 102px;"
+                    })
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-block">
@@ -218,13 +251,16 @@
         //var anamnesis = JSON.stringify($("#Treatment_Anamnesis").val().split('\n'));
         var observations = $("#Treatment_Observations");
         var anamnesis = $("#Treatment_Anamnesis");
+        var treatmentNotes = $("#Treatment_TreatmentNotes");
+
+        console.log(treatmentNotes);
 
         var observationsAsJson = JSON.stringify(observations.val().substr(0, observations.selectionStart).split("\n"));
         var anamnesisAsJson = JSON.stringify(anamnesis.val().substr(0, anamnesis.selectionStart).split("\n"));
+        var treatmentNotesAsJson = JSON.stringify(treatmentNotes.val().substr(0, treatmentNotes.selectionStart).split("\n"));
+        console.log(treatmentNotesAsJson);
         var treatmentId = $("#Treatment_TreatmentId").val();
         var customerId = $("#Treatment_CustomerId").val();
-
-        //$("#Treatment_Observations").val().substr(0,$("#Treatment_Observations").selectionStart).split("\n")
 
         console.log(afflication);
 
@@ -235,33 +271,49 @@
                 Afflication: afflication,
                 Observations: observationsAsJson,
                 Anamnesis: anamnesisAsJson,
+                TreatmentNotes: treatmentNotesAsJson,
                 TreatmentId: treatmentId,
                 CustomerId: customerId
             }
         })
         .done(function (data) {
-            console.log("Sucess");
-        })
+            console.log("Sucess " + data);
+                if (parseInt(data) > 0) {
+                    window.location.href = "http://journal.no/Treatment/Treatment?treatmentId=" + data;
+                } else {
+                    window.location.reload();
+                }
+            })
         .fail(function (error) {
             console.log("Noe gikk galt: ", error);
         });
 
     });
 
-    $("#ShowAllAfflictions").click(function() {
+    @*$("#ShowAllAfflictions").click(function() {
         var checkBoxes = $(".old-afflications");
         var showAfflications = $("#ShowAllAfflictions");
 
-        checkBoxes.each(function (i) {
-            if(showAfflications.prop("checked")){
-                checkBoxes[i].checked = true;
-                //redrawPersistedCrosses();
-            }
-            else{
-                checkBoxes[i].checked = false;
-            }
-        });
-    });
+        var oldPersistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.OldAfflications));
+
+        if (showAfflications.prop("checked")) {
+            console.log("Checked");
+            redrawOldPersistedCrosses(oldPersistedCrosses);
+        } 
+        else {
+            removeOldPersistedCrosses();
+        }
+
+        //checkBoxes.each(function (i) {
+        //    if(showAfflications.prop("checked")){
+        //        checkBoxes[i].checked = true;
+        //        //redrawPersistedCrosses();
+        //    }
+        //    else{
+        //        checkBoxes[i].checked = false;
+        //    }
+        //});
+    });*@
 
     $(".old-afflications").click(function(checkbox) {
         console.log("H");
@@ -312,7 +364,7 @@
                 return buttonType = ButtonTypeEnum.NOTSET;
         }
     }
-    
+
     $(document).ready(function () {
 
         buttonType = ButtonTypeEnum.MEDIUM;
@@ -338,7 +390,7 @@
                 imgs = data;
                 setCanvasImage(imgs.base64imgage);
                 setPersistedCrosses();
-                
+
             },
             error: function (xhr) {
                 alert("Error occurred while loading the image. "
@@ -355,23 +407,63 @@
                  + base64Data;
 
         base_image.onload = new function() {
-            base_image.src = img;   
+            base_image.src = img;
         };
         resizeCanvasImage(base_image, canvas, 800, 467);
     };
 
     function setPersistedCrosses() {
         var persistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.AfflictionAreas));
-        redrawPersistedCrosses(persistedCrosses);
+        @*var oldPersistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.OldAfflications));*@
+        redrawPersistedCrosses(persistedCrosses, false);
+        //redrawOldPersistedCrosses(oldPersistedCrosses);
     }
 
-    function redrawPersistedCrosses(persistedCrosses){
+    function redrawOldPersistedCrosses(oldPersistedCrosses)
+    {
+        if (oldPersistedCrosses.length > 0) {
+            $.each(oldPersistedCrosses, function() {
+                console.log(this.Afflications.length);
+                redrawPersistedCrosses(this.Afflications, true);
+            });
+        }
+    }
+
+    function removeOldPersistedCrosses() {
+        var eraseCross;
+        var eraseIndexCross = -1;
+        var teller = 0;
+
+        if (drawnCrosses.length > 0) {
+            var index;
+            for (index = 0; index < drawnCrosses.length; ++index) {
+
+                //console.log(drawnCrosses[index]);
+                if (drawnCrosses[index].isOldPersistedAffliction) {
+                    eraseCross = drawnCrosses[index];
+                    eraseIndexCross = index;
+
+                    if (typeof eraseCross !== 'undefined') {
+                        drawnCrosses.splice(eraseIndexCross, 1);
+                        teller++;
+                    };
+                }
+            }
+        }
+        console.log("Slettet: " + teller);
+        reDrawImageWithRemainingCrosses();
+    }
+
+    function redrawPersistedCrosses(persistedCrosses, isOldAfflication) {
+        console.log(isOldAfflication);
         if (persistedCrosses.length > 0) {
             $.each(persistedCrosses, function() {
                 buttonType = SetButtonTypeEnum(this.CrossSize);
-                var crossObject = { mouseXPosition: this.MouseXPosition, 
-                    mouseYPosition: this.MouseYPosition, crossSize: this.CrossSize, 
-                    buttonType: buttonType, isPersisted : true };
+                console.log(this.TreatmentId);
+                var crossObject = { mouseXPosition: this.MouseXPosition,
+                    mouseYPosition: this.MouseYPosition, crossSize: this.CrossSize,
+                    buttonType: buttonType, isPersisted : true, treatmentId: this.TreatmentId,
+                    afflictionAreaId : this.AfflictionAreaId, isOldPersistedAffliction: isOldAfflication};
 
 
                 drawnCrosses.push(crossObject);
@@ -490,7 +582,7 @@
         if (drawImage) {
             drawCross(x, y, buttonType);
 
-            var crossObject = { mouseXPosition: pos.x, mouseYPosition: pos.y, 
+            var crossObject = { mouseXPosition: pos.x, mouseYPosition: pos.y,
                 crossSize: buttonType.enumValue, buttonType: buttonType, isPersisted : false };
 
             drawnCrosses.push(crossObject);
@@ -526,7 +618,7 @@
             } else {
                 drawnCrosses.push(undoCross);
             }
-            
+
         }
     });
 

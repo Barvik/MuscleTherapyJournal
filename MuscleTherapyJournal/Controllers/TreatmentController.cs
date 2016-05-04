@@ -64,6 +64,14 @@ namespace MuscleTherapyJournal.Controllers
                 {
                     model.Treatment.Customer = _customerService.GetCustomer(customerId);
                     model.Treatment.CustomerId = model.Treatment.Customer.CustomerId;
+                    
+                    var oldAfflicaitons = _customerService.GetOldAfflicationsByCustomerId(customerId);
+                    model.OldAfflications = oldAfflicaitons;
+
+                    if (oldAfflicaitons.Any())
+                    {
+                        model.HasOldAfflications = true;
+                    }
                 }
             }
 

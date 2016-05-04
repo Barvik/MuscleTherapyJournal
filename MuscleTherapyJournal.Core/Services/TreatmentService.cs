@@ -31,20 +31,43 @@ namespace MuscleTherapyJournal.Core.Services
             _mappingEngine = mappingEngine;
         }
 
-        public bool SaveTreatment(Treatment treatment)
+        public int SaveTreatment(Treatment treatment, bool newTreatment)
         {
-            _logger.DebugFormat("Entering SaveTreatment with treatMent: {0}", treatment);
+            _logger.DebugFormat("Entering SaveTreatment with treatment: {0} and newTreatment: {1}", treatment, newTreatment);
 
+            if (newTreatment)
+            {
+                return SaveNewTreatment(treatment);
+            }
+
+            return UpdateTreatment(treatment);
+        }
+
+        private int UpdateTreatment(Treatment treatment)
+        {
             try
             {
                 var request = _mappingEngine.Map<TreatmentEntity>(treatment);
-                _treatmentRepository.CreateTreatment(request);
-                return true;
+                return _treatmentRepository.UpdateTreatment(request);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorFormat("Exception when updating treatment: {0}", ex);
+                return 0;
+            }
+        }
+
+        public int SaveNewTreatment(Treatment treatment)
+        {
+            try
+            {
+                var request = _mappingEngine.Map<TreatmentEntity>(treatment);
+                return _treatmentRepository.CreateTreatment(request);
             }
             catch (Exception ex)
             {
                 _logger.ErrorFormat("Exception when creating treatment: {0}", ex);
-                return false;
+                return 0;
             }
         }
 

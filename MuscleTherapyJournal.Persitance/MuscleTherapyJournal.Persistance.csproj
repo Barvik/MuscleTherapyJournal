@@ -74,6 +74,18 @@
     <Compile Include="Migrations\201510141808094_DateTimeNullable.Designer.cs">
       <DependentUpon>201510141808094_DateTimeNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604030835572_Add Treatment_Description.cs" />
+    <Compile Include="Migrations\201604030835572_Add Treatment_Description.Designer.cs">
+      <DependentUpon>201604030835572_Add Treatment_Description.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604030839335_Change name treatment_Notes.cs" />
+    <Compile Include="Migrations\201604030839335_Change name treatment_Notes.Designer.cs">
+      <DependentUpon>201604030839335_Change name treatment_Notes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605041758282_Test.cs" />
+    <Compile Include="Migrations\201605041758282_Test.Designer.cs">
+      <DependentUpon>201605041758282_Test.cs</DependentUpon>
+    </Compile>
     <Compile Include="RelationshipEntities\TreatmentCustomerEntity.cs" />
     <Compile Include="Repositories\AreaAfflicationRepository.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
@@ -201,6 +213,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510141808094_DateTimeNullable.resx">
       <DependentUpon>201510141808094_DateTimeNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604030835572_Add Treatment_Description.resx">
+      <DependentUpon>201604030835572_Add Treatment_Description.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604030839335_Change name treatment_Notes.resx">
+      <DependentUpon>201604030839335_Change name treatment_Notes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605041758282_Test.resx">
+      <DependentUpon>201605041758282_Test.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

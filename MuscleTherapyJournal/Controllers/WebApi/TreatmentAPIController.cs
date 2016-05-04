@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 using MuscleTherapyJournal.Core.Services.Interfaces;
@@ -12,12 +13,18 @@ namespace MuscleTherapyJournal.Controllers.WebApi
     public class TreatmentApiController : ApiController
     {
         private readonly ITreatmentService _treatmentService;
+        private readonly ICustomerService _customerService;
+        private readonly IAreaAfflicationService _areaAfflicationService;
 
-        public TreatmentApiController(ITreatmentService treatmentService)
+        public TreatmentApiController(ITreatmentService treatmentService, ICustomerService customerService, IAreaAfflicationService areaAfflicationService)
         {
             if (treatmentService == null) throw new ArgumentNullException("treatmentService");
+            if (customerService == null) throw new ArgumentNullException("customerService");
+            if (areaAfflicationService == null) throw new ArgumentNullException("areaAfflicationService");
 
             _treatmentService = treatmentService;
+            _customerService = customerService;
+            _areaAfflicationService = areaAfflicationService;
         }
 
         [HttpPost]
@@ -27,33 +34,68 @@ namespace MuscleTherapyJournal.Controllers.WebApi
             var afflications = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AfflictionArea>>(model.Afflication);
             var observations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(model.Observations);
             var anamnesis = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(model.Anamnesis);
+            var treatmentNotes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(model.TreatmentNotes);
+
+            var newTreatment = model.TreatmentId == 0;
 
             var observationsAsTextArea = SetupAsTextArea(observations);
             var anamnesisAsTextArea = SetupAsTextArea(anamnesis);
+            var treatmentNotesAsTextArea = SetupAsTextArea(treatmentNotes);
 
-            foreach (var afflictionArea in afflications)
+            afflications.RemoveAll(x => x.IsPersisted);
+
+            var oldAfflications = _areaAfflicationService.GetAfflicationAreasByCustomerId(model.CustomerId);
+            var newAfflications = new List<AfflictionArea>();
+            if (oldAfflications != null && oldAfflications.Any())
             {
-                afflictionArea.CreatedDate = DateTime.Now;
+                foreach (var afflictionArea in afflications)
+                {
+                    var isPersisted =
+                        oldAfflications.Exists(
+                            x =>
+                                x.MouseXPosition == afflictionArea.MouseXPosition &&
+                                x.MouseYPosition == afflictionArea.MouseXPosition);
+
+                    if (!isPersisted)
+                    {
+                        newAfflications.Add(afflictionArea);
+                    }
+                }
+            }
+            else
+            {
+                newAfflications = afflications;
             }
 
-
-            var treatment = new Treatment
+            foreach (var afflictionArea in newAfflications)
             {
-                AfflictionAreas = afflications,
-                Anamnesis = anamnesisAsTextArea,
-                Observations = observationsAsTextArea,
-                CreatedDate = DateTime.Now,
-                ChangedDate = DateTime.Now,
-                CustomerId = model.CustomerId,
-                UserId = 1
-            };
+                afflictionArea.CreatedDate = DateTime.Now;
+                afflictionArea.TreatmentId = model.TreatmentId;
+                afflictionArea.CustomerId = model.CustomerId;
+            }
 
+            var treatment = _treatmentService.GetTreatmentById(model.TreatmentId);
 
-            _treatmentService.SaveTreatment(treatment);
-            
+            if (treatment == null)
+            {
+                treatment = new Treatment
+                {
+                    CreatedDate = DateTime.Now,
+                    UserId = 1,
+                    CustomerId = model.CustomerId
+                };
+            }
 
+            treatment.AfflictionAreas = newAfflications;
+            treatment.Anamnesis = anamnesisAsTextArea;
+            treatment.ChangedDate = DateTime.Now;
+            treatment.TreatmentNotes = treatmentNotesAsTextArea;
+            treatment.Observations = observationsAsTextArea;
+            treatment.UserId = 1;
 
-            return Ok();
+            var treatmentId = _treatmentService.SaveTreatment(treatment, newTreatment);
+
+            return Ok(treatmentId);
         }
 
         private string SetupAsTextArea(IEnumerable<string> textAreaList)
@@ -108,6 +150,7 @@ namespace MuscleTherapyJournal.Controllers.WebApi
     public class SaveTreatmentApiModel
     {
         public string Afflication { get; set; }
+        public string TreatmentNotes { get; set; }
         public string Observations { get; set; }
         public string Anamnesis { get; set; }
         public int TreatmentId { get; set; }

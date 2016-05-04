@@ -15,6 +15,8 @@ namespace MuscleTherapyJournal.Domain.Model
         public DateTime? CreatedDate { get; set; }
         public DateTime? ChangedDate { get; set; }
         public int UserId { get; set; }
+        [DisplayName("Behandling:")]
+        public string TreatmentNotes { get; set; }
         [DisplayName("Anamnese:")]
         public string Anamnesis { get; set; }
         [DisplayName("Observasjoner:")]

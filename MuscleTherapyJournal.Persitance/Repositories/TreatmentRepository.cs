@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
@@ -28,7 +29,7 @@ namespace MuscleTherapyJournal.Persitance.DAO
         private string SearchOldTreatments_Query =
             "SELECT * from Treatment WHERE customerId = @CustomerId ORDER BY CreatedDate DESC";
 
-        public void CreateTreatment(TreatmentEntity treatment)
+        public int CreateTreatment(TreatmentEntity treatment)
         {
             _logger.DebugFormat("Create treatment.");
 
@@ -37,6 +38,8 @@ namespace MuscleTherapyJournal.Persitance.DAO
                 db.Treatments.Add(treatment);
                 db.SaveChanges();
             }
+
+            return treatment.TreatmentId;
         }
 
         public TreatmentEntity GetTreatment(int treatmentId)
@@ -83,5 +86,38 @@ namespace MuscleTherapyJournal.Persitance.DAO
 
             return result.ToList();
         }
+
+        public int UpdateTreatment(TreatmentEntity treatment)
+        {
+            _logger.DebugFormat("Update treatment.");
+
+            using (var db = new MuscleTherapyContext())
+            {
+                foreach (var afflictionAreaEntity in treatment.AfflictionAreas)
+                {
+                    if (afflictionAreaEntity.AfflictionAreaId == 0)
+                    {
+                        db.AfflictionAreas.Add(afflictionAreaEntity);
+                    }
+                }
+                db.SaveChanges();
+
+
+                db.Treatments.Attach(treatment);
+                db.Entry(treatment).State = EntityState.Modified;
+
+                
+
+                db.SaveChanges();
+            }
+
+            return treatment.TreatmentId;
+        }
     }
 }
+
+//db.Users.Attach(updatedUser);
+//var entry = db.Entry(updatedUser);
+//entry.Property(e => e.Email).IsModified = true;
+//// other changed properties
+//db.SaveChanges();
