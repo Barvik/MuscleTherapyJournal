@@ -25,7 +25,16 @@ namespace MuscleTherapyJournal.Core.Services
 
         public List<AfflictionArea> GetAfflicationAreasByTreatmentId(int treatmendId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var afflicationArea = _areaAfflicationRepository.GetAfflicationAreas(treatmendId);
+                return _mappingEngine.Map<List<AfflictionArea>>(afflicationArea);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorFormat("Exception when calling GetAfflicationAreasByCustomerId for TreatmentId: {0} and Exception: {1}", treatmendId, ex);
+            }
+            return null;
         }
 
         public List<AfflictionArea> GetAfflicationAreasByCustomerId(int customerId)

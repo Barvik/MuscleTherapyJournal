@@ -120,26 +120,14 @@
                         </div>
                     </div>
                     <canvas id="treatmentCanvas"></canvas>
-                    @*@if (Model.HasOldAfflications)
+                    @if (Model.HasOldAfflications)
                     {
                         <div class="panel-footer">
                             <div class="checkbox">
-                                @Html.CheckBox("AllAfflictions", new {id = "ShowAllAfflictions", @checked = true}) Vis alle tidligere behandlinger
+                                @Html.CheckBox("AllAfflictions", new {id = "ShowAllAfflictions" }) Vis alle tidligere behandlinger
                             </div>
-                            @foreach (var oldAfflication in Model.OldAfflications)
-                            {
-                                <div class="checkbox-inline" id="oldAfflicationsCheckBoxes">
-                                    @Html.CheckBox("Checkbox", new
-                                    {
-                                        id = oldAfflication.TreatmentId,
-                                        @checked = true,
-                                        @class = "old-afflications"
-                                    })
-                                    @oldAfflication.TreatmentDate.ToString("dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("no"))
-                                </div>
-                            }
                         </div>
-                    }*@
+                    }
                 </div>
 
             </div>
@@ -217,7 +205,7 @@
                 </div>
             </div>
         </div>
-        @*@Html.Partial("_ModalTreatment")*@
+        @Html.Partial("_ModalTreatment")
 
 
     </div>
@@ -244,7 +232,7 @@
 
     $("#saveTreatment").click(function () {
 
-        //$('#treatmentModal').modal('show');
+        $('#treatmentModal').modal('show');
 
         var afflication = JSON.stringify(drawnCrosses);
         //var observations = JSON.stringify($("#Treatment_Observations").val().split('\n'));
@@ -290,30 +278,18 @@
 
     });
 
-    @*$("#ShowAllAfflictions").click(function() {
-        var checkBoxes = $(".old-afflications");
+    $("#ShowAllAfflictions").click(function() {
         var showAfflications = $("#ShowAllAfflictions");
 
-        var oldPersistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.OldAfflications));
+        var oldPersistedCrosses = @Html.Raw(Json.Encode(Model.OldAfflications));
 
         if (showAfflications.prop("checked")) {
-            console.log("Checked");
             redrawOldPersistedCrosses(oldPersistedCrosses);
         } 
         else {
-            removeOldPersistedCrosses();
+            removeOldPersistedCrosses(oldPersistedCrosses);
         }
-
-        //checkBoxes.each(function (i) {
-        //    if(showAfflications.prop("checked")){
-        //        checkBoxes[i].checked = true;
-        //        //redrawPersistedCrosses();
-        //    }
-        //    else{
-        //        checkBoxes[i].checked = false;
-        //    }
-        //});
-    });*@
+    });
 
     $(".old-afflications").click(function(checkbox) {
         console.log("H");
@@ -422,40 +398,59 @@
     function redrawOldPersistedCrosses(oldPersistedCrosses)
     {
         if (oldPersistedCrosses.length > 0) {
-            $.each(oldPersistedCrosses, function() {
-                console.log(this.Afflications.length);
-                redrawPersistedCrosses(this.Afflications, true);
-            });
+            redrawPersistedCrosses(oldPersistedCrosses, true);
         }
     }
 
-    function removeOldPersistedCrosses() {
-        var eraseCross;
-        var eraseIndexCross = -1;
-        var teller = 0;
-
+    function removeOldPersistedCrosses(oldPersistedCrosses) {
         if (drawnCrosses.length > 0) {
-            var index;
-            for (index = 0; index < drawnCrosses.length; ++index) {
+            $.each(oldPersistedCrosses, function() {
+                console.log("LOOOL : " + this.AfflictionAreaId);
+                var afflicationId = this.AfflictionAreaId;
+                var currentCross;
+                var pos = drawnCrosses.map(function(e) { return e.afflictionAreaId; }).indexOf(this.AfflictionAreaId);
+                console.log("TULL: " + pos);
+                var removeCross = $.grep(drawnCrosses, function(e) {
+                    if (e.afflictionAreaId == afflicationId) {
+                        currentCross = e;
+                    }
+                    return e.afflictionAreaId == afflicationId;
+                });
+                drawnCrosses.splice(pos, 1);
+                console.log("HEEEEEEEEER: " + currentCross.afflictionAreaId);
 
-                //console.log(drawnCrosses[index]);
-                if (drawnCrosses[index].isOldPersistedAffliction) {
-                    eraseCross = drawnCrosses[index];
-                    eraseIndexCross = index;
+            });
 
-                    if (typeof eraseCross !== 'undefined') {
-                        drawnCrosses.splice(eraseIndexCross, 1);
-                        teller++;
-                    };
-                }
-            }
+            reDrawImageWithRemainingCrosses();
         }
-        console.log("Slettet: " + teller);
-        reDrawImageWithRemainingCrosses();
     }
+
+    //function removeOldPersistedCrosses() {
+    //    var eraseCross;
+    //    var eraseIndexCross = -1;
+    //    var teller = 0;
+
+    //    if (drawnCrosses.length > 0) {
+    //        var index;
+    //        for (index = 0; index < drawnCrosses.length; ++index) {
+
+    //            //console.log(drawnCrosses[index]);
+    //            if (drawnCrosses[index].isOldPersistedAffliction) {
+    //                eraseCross = drawnCrosses[index];
+    //                eraseIndexCross = index;
+
+    //                if (typeof eraseCross !== 'undefined') {
+    //                    drawnCrosses.splice(eraseIndexCross, 1);
+    //                    teller++;
+    //                };
+    //            }
+    //        }
+    //    }
+    //    console.log("Slettet: " + teller);
+    //    reDrawImageWithRemainingCrosses();
+    //}
 
     function redrawPersistedCrosses(persistedCrosses, isOldAfflication) {
-        console.log(isOldAfflication);
         if (persistedCrosses.length > 0) {
             $.each(persistedCrosses, function() {
                 buttonType = SetButtonTypeEnum(this.CrossSize);

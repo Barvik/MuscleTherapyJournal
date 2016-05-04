@@ -16,17 +16,23 @@ namespace MuscleTherapyJournal.Controllers
         private readonly ITreatmentFactory _treatmentFactory;
         private readonly ITreatmentService _treatmentService;
         private readonly ICustomerService _customerService;
+        private readonly IAreaAfflicationService _areaAfflicationService;
         private readonly ILog _logger = LogManager.GetLogger(typeof(TreatmentController));
 
-        public TreatmentController(ITreatmentFactory treatmentFactory, ITreatmentService treatmentService, ICustomerService customerService)
+        public TreatmentController(ITreatmentFactory treatmentFactory, 
+            ITreatmentService treatmentService, 
+            ICustomerService customerService,
+            IAreaAfflicationService areaAfflicationService)
         {
             if (treatmentFactory == null) throw new ArgumentNullException("treatmentFactory");
             if (treatmentService == null) throw new ArgumentNullException("treatmentService");
             if (customerService == null) throw new ArgumentNullException("customerService");
+            if (areaAfflicationService == null) throw new ArgumentNullException("areaAfflicationService");
 
             _treatmentFactory = treatmentFactory;
             _treatmentService = treatmentService;
             _customerService = customerService;
+            _areaAfflicationService = areaAfflicationService;
         }
 
         [HttpGet]
@@ -41,7 +47,14 @@ namespace MuscleTherapyJournal.Controllers
                 var treatment = _treatmentService.GetTreatmentById(treatmentId);
                 treatment.Customer = _customerService.GetCustomer(treatment.CustomerId);
 
-                var oldAfflicaitons = _customerService.GetOldAfflicationsByCustomerId(treatment.CustomerId);
+                //var oldAfflicaitons = _customerService.GetOldAfflicationsByCustomerId(treatment.CustomerId);
+                var oldAfflicaitons = _areaAfflicationService.GetAfflicationAreasByCustomerId(treatment.CustomerId);
+                oldAfflicaitons.RemoveAll(x => x.TreatmentId == treatmentId);
+                foreach (var oldAfflicaiton in oldAfflicaitons)
+                {
+                    oldAfflicaiton.IsPersisted = true;
+                }
+
                 model = new TreatmentViewModel
                 {
                     Treatment = treatment,
@@ -65,7 +78,14 @@ namespace MuscleTherapyJournal.Controllers
                     model.Treatment.Customer = _customerService.GetCustomer(customerId);
                     model.Treatment.CustomerId = model.Treatment.Customer.CustomerId;
                     
-                    var oldAfflicaitons = _customerService.GetOldAfflicationsByCustomerId(customerId);
+                    //var oldAfflicaitons = _customerService.GetOldAfflicationsByCustomerId(customerId);
+                    var oldAfflicaitons = _areaAfflicationService.GetAfflicationAreasByCustomerId(customerId);
+
+                    foreach (var oldAfflicaiton in oldAfflicaitons)
+                    {
+                        oldAfflicaiton.IsPersisted = true;
+                    }
+
                     model.OldAfflications = oldAfflicaitons;
 
                     if (oldAfflicaitons.Any())

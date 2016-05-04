@@ -94,8 +94,22 @@ namespace MuscleTherapyJournal.Controllers.WebApi
             treatment.UserId = 1;
 
             var treatmentId = _treatmentService.SaveTreatment(treatment, newTreatment);
+            //var persistedAfflictions = new OldAfflications
+            //{
+            //    Afflications = _areaAfflicationService.GetAfflicationAreasByTreatmentId(treatmentId),
+            //    TreatmentId = treatmentId
+            //};
+            
+            //if (persistedAfflictions.Afflications != null && persistedAfflictions.Afflications.Any())
+            //{
+            //    foreach (var persistedAffliction in persistedAfflictions.Afflications)
+            //    {
+            //        persistedAffliction.IsPersisted = true;
+            //    }
+            //}
 
             return Ok(treatmentId);
+            //return Ok(persistedAfflictions);
         }
 
         private string SetupAsTextArea(IEnumerable<string> textAreaList)

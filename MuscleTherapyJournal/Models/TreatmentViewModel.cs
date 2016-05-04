@@ -13,7 +13,8 @@ namespace MuscleTherapyJournal.Models
         Display(Name = "Behandling dato")]
         public string CreatedDate { get; set; }
         public string FullAddress { get; set; }
-        public List<OldAfflications> OldAfflications { get; set; }
+        //public List<OldAfflications> OldAfflications { get; set; }
+        public List<AfflictionArea> OldAfflications { get; set; }
         public bool HasOldAfflications { get; set; }
     }
 }
