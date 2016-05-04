@@ -104,7 +104,7 @@
 
         <div class="row">
             <div class="col-md-4">
-                
+
             </div>
             <div class="col-md-4">
                 <div class="btn-group">
@@ -124,9 +124,12 @@
                             Lagre Ny Kunde
                         </button>
                     }
-                    
+
                 </div>
             </div>
+            @Html.Partial("_ModalTreatment")
+
+
         </div>
     </div>
 }
@@ -135,8 +138,20 @@
 
     $(document).ready(function () {
 
+        var form = $("#customerForm");
+
+        form.on("submit", function(e) {
+            if (form.valid()) {
+                $('#myModalLabel').html('<p>Lagrer kunde. Vennligst vent...</p>');
+                $("#treatmentModal").modal("show");
+
+                return true;
+            }
+            return false;
+
+        });
+
         var isPostBack = ($("#IsFormPostBack").val() === "True");
-        console.log($("#IsFormPostBack").val() + " " + isPostBack);
 
         if (!isPostBack) {
             $(".update-message").hide();
@@ -238,7 +253,6 @@
 
 
     function returnNameToUpperCase(textBoxValue) {
-        console.log(textBoxValue);
         return textBoxValue.toLowerCase().replace(/\b[a-z]/g, function (letter) {
             return letter.toUpperCase();
         });

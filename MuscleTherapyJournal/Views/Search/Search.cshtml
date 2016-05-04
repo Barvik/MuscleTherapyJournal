@@ -120,7 +120,6 @@
 
         $(".search-type-treatment").hide();
 
-        console.log($("#SearchParameters_SearchType").val());
         if ($("#SearchParameters_SearchType").val() == 1) {
             enableSearchTypeCustomer();
         }
@@ -157,12 +156,10 @@
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             if (e.target.id == "searchTypeCustomer") {
-                console.log("customer");
                 enableSearchTypeCustomer();
             }
 
             if (e.target.id == "searchTypeTreatment") {
-                console.log("treatment");
                 enableSearchTypeTreatment();
             }
         });

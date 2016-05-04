@@ -226,7 +226,6 @@
 
 
     $("#treatmentForm").submit(function (event) {
-        console.log("Handler for .submit() called.");
         event.preventDefault();
     });
 
@@ -246,7 +245,6 @@
         var observationsAsJson = JSON.stringify(observations.val().substr(0, observations.selectionStart).split("\n"));
         var anamnesisAsJson = JSON.stringify(anamnesis.val().substr(0, anamnesis.selectionStart).split("\n"));
         var treatmentNotesAsJson = JSON.stringify(treatmentNotes.val().substr(0, treatmentNotes.selectionStart).split("\n"));
-        console.log(treatmentNotesAsJson);
         var treatmentId = $("#Treatment_TreatmentId").val();
         var customerId = $("#Treatment_CustomerId").val();
 
@@ -265,7 +263,6 @@
             }
         })
         .done(function (data) {
-            console.log("Sucess " + data);
                 if (parseInt(data) > 0) {
                     window.location.href = "http://journal.no/Treatment/Treatment?treatmentId=" + data;
                 } else {
@@ -289,10 +286,6 @@
         else {
             removeOldPersistedCrosses(oldPersistedCrosses);
         }
-    });
-
-    $(".old-afflications").click(function(checkbox) {
-        console.log("H");
     });
 
     var ButtonTypeEnum = {
@@ -345,13 +338,6 @@
 
         buttonType = ButtonTypeEnum.MEDIUM;
 
-        var form_modified = false;
-
-        //$(window).bind('beforeunload', function () {
-        //    $('treatmentModal').modal('show');
-        //    return 'Are you sure you want to leave?';
-        //});
-
         $(function() {
             $( "#datepicker" ).datepicker({  maxDate: new Date() });
         });
@@ -390,9 +376,7 @@
 
     function setPersistedCrosses() {
         var persistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.AfflictionAreas));
-        @*var oldPersistedCrosses = @Html.Raw(Json.Encode(Model.Treatment.OldAfflications));*@
         redrawPersistedCrosses(persistedCrosses, false);
-        //redrawOldPersistedCrosses(oldPersistedCrosses);
     }
 
     function redrawOldPersistedCrosses(oldPersistedCrosses)
@@ -405,56 +389,19 @@
     function removeOldPersistedCrosses(oldPersistedCrosses) {
         if (drawnCrosses.length > 0) {
             $.each(oldPersistedCrosses, function() {
-                console.log("LOOOL : " + this.AfflictionAreaId);
-                var afflicationId = this.AfflictionAreaId;
-                var currentCross;
-                var pos = drawnCrosses.map(function(e) { return e.afflictionAreaId; }).indexOf(this.AfflictionAreaId);
-                console.log("TULL: " + pos);
-                var removeCross = $.grep(drawnCrosses, function(e) {
-                    if (e.afflictionAreaId == afflicationId) {
-                        currentCross = e;
-                    }
-                    return e.afflictionAreaId == afflicationId;
-                });
-                drawnCrosses.splice(pos, 1);
-                console.log("HEEEEEEEEER: " + currentCross.afflictionAreaId);
-
+                var index = drawnCrosses.map(function(e) { return e.afflictionAreaId; }).indexOf(this.AfflictionAreaId);
+               
+                drawnCrosses.splice(index, 1);
             });
 
             reDrawImageWithRemainingCrosses();
         }
     }
 
-    //function removeOldPersistedCrosses() {
-    //    var eraseCross;
-    //    var eraseIndexCross = -1;
-    //    var teller = 0;
-
-    //    if (drawnCrosses.length > 0) {
-    //        var index;
-    //        for (index = 0; index < drawnCrosses.length; ++index) {
-
-    //            //console.log(drawnCrosses[index]);
-    //            if (drawnCrosses[index].isOldPersistedAffliction) {
-    //                eraseCross = drawnCrosses[index];
-    //                eraseIndexCross = index;
-
-    //                if (typeof eraseCross !== 'undefined') {
-    //                    drawnCrosses.splice(eraseIndexCross, 1);
-    //                    teller++;
-    //                };
-    //            }
-    //        }
-    //    }
-    //    console.log("Slettet: " + teller);
-    //    reDrawImageWithRemainingCrosses();
-    //}
-
     function redrawPersistedCrosses(persistedCrosses, isOldAfflication) {
         if (persistedCrosses.length > 0) {
             $.each(persistedCrosses, function() {
                 buttonType = SetButtonTypeEnum(this.CrossSize);
-                console.log(this.TreatmentId);
                 var crossObject = { mouseXPosition: this.MouseXPosition,
                     mouseYPosition: this.MouseYPosition, crossSize: this.CrossSize,
                     buttonType: buttonType, isPersisted : true, treatmentId: this.TreatmentId,
