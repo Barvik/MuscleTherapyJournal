@@ -41,7 +41,7 @@ namespace MuscleTherapyJournal
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/Site.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                   "~/Content/themes/base/core.css",
@@ -61,7 +61,9 @@ namespace MuscleTherapyJournal
             bundles.Add(new StyleBundle("~/Content/appcss").Include(
                       "~/Content/font-awesome.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/pages.css",
+                      "~/Content/pages.css"));
+
+            bundles.Add(new StyleBundle("~/Content/treatmentcss").Include(
                       "~/Content/treatment.css"));
 
         }

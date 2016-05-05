@@ -28,6 +28,11 @@ namespace MuscleTherapyJournal.Domain.Model
         public List<AfflictionArea> AfflictionAreas { get; set; }
         public List<OldAfflications> OldAfflications { get; set; }
 
+        public string OldTreatmentNotes { get; set; }
+        public string OldAnamnesis { get; set; }
+        public string OldObservations { get; set; }
+
+
         public override string ToString()
         {
             return

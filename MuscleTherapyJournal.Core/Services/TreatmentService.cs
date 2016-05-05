@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using AutoMapper;
 using log4net;
 using MuscleTherapyJournal.Core.Services.Interfaces;
@@ -126,6 +128,53 @@ namespace MuscleTherapyJournal.Core.Services
                 
             }
             return null;
+        }
+
+        public OldTreatmentNotes GetOldTreatmentNotesByCustomerId(int customerId, int treatmentId)
+        {
+            var treatments = new List<Treatment>();
+            var result = new OldTreatmentNotes();
+
+            try
+            {
+                var unmappedTreatments = _treatmentRepository.GetTreatmentsByCustomerId(customerId);
+                treatments = _mappingEngine.Map<List<Treatment>>(unmappedTreatments);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorFormat("Exception when calling GetTreatmentByCustomer with customerId: {0} and Exception: {1}", customerId, ex);
+                return null;
+            }
+
+            if (!treatments.Any())
+            {
+                return null;
+            }
+
+            treatments.RemoveAll(x => x.TreatmentId == treatmentId);
+
+            foreach (var treatment in treatments)
+            {
+                result.OldAnamnese += SetTextWithDate(treatment.CreatedDate.GetValueOrDefault(), treatment.Anamnesis);
+                result.OldNotes += SetTextWithDate(treatment.CreatedDate.GetValueOrDefault(), treatment.TreatmentNotes);
+                result.OldObservations += SetTextWithDate(treatment.CreatedDate.GetValueOrDefault(),
+                    treatment.Observations);
+            }
+
+            return result;
+        }
+
+        private string SetTextWithDate(DateTime treatMentDate, string text)
+        {
+            var result = "";
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                result = treatMentDate.ToString("dd.MM.yyyy");
+                result += "\r\n";
+                result += text;
+                result += "\r\n\r\n";
+            }
+            return result;
         }
     }
 }

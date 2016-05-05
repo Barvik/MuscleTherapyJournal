@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Behandling";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/appcss")
+    @Styles.Render("~/Content/treatmentcss")
+    @Styles.Render("~/Content/themes/base/css")
+
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    @RenderBody()
+</body>
+</html>

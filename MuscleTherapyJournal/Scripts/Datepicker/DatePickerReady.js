@@ -8,7 +8,7 @@
         changeYear: true,
         maxDate: new Date,
         showOn: "button",
-        buttonText : "<i class='fa fa-calendar'></i>",
+        buttonText: "<i class='fa fa-calendar'></i>",
         monthNames: ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"],
         monthNamesShort: ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"],
         dayNamesShort: ["søn", "man", "tir", "ons", "tor", "fre", "lør"],
@@ -36,6 +36,8 @@ jQuery.browser = {};
         jQuery.browser.version = RegExp.$1;
     }
 })();
+
+
 
 //(function (factory) {
 //    if (typeof define === "function" && define.amd) {

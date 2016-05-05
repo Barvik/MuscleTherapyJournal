@@ -60,6 +60,7 @@
     <Compile Include="Model\AfflictionArea.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\OldAfflications.cs" />
+    <Compile Include="Model\OldTreatmentNotes.cs" />
     <Compile Include="Model\Treatment.cs" />
     <Compile Include="Model\TreatmentCustomer.cs" />
     <Compile Include="Model\User.cs" />

@@ -4,7 +4,7 @@
 
 @{
     ViewBag.Title = "Behandling";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_TreatmentBaseLayout.cshtml";
 }
 
 @using (Html.BeginForm("Treatment", "Treatment", FormMethod.Post, new { id = "treatmentForm" }))
@@ -134,31 +134,53 @@
             <div class="col-md-7">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        @Html.LabelFor(model => model.Treatment.TreatmentNotes, new { @class = "control-label" })
+                        <ul class="nav nav-tabs " role="tabpanel" data-tabs="tabs">
+                            <li class="active">
+                                <a class="tab-href" href="#newNotes" role="tab" data-toggle="tab">Behandling</a>
+                            </li>
+                            @if (!string.IsNullOrWhiteSpace(Model.Treatment.OldTreatmentNotes))
+                            {
+                                <li>
+                                    <a class="tab-href" href="#oldNotes" role="tab" data-toggle="tab">Tidligere behandlinger</a>
+                                </li>
+                            }
+                        </ul>
                     </div>
 
-                    @Html.TextAreaFor(model => model.Treatment.TreatmentNotes, new
-                    {
-                        @placeholder = "Legg til behandling",
-                        @class = "form-control textarea",
-                        @spellcheck = "false",
-                        @style = "font-family: Calibri; width: 100%; max-height: 472px; min-height: 472px;"
-                    })
+                    <div id="my-tab-content" class="tab-content">
+
+                        @{
+                            var treatmentNotesStyle = "font-family: Calibri; width: 100%; max-height: 472px; min-height: 472px;";
+
+                            if (Model.HasOldAfflications)
+                            {
+                                treatmentNotesStyle = "font-family: Calibri; width: 100%; max-height: 533px; min-height: 533px;";
+                            }
+                        }
+                        <div class="tab-pane active" id="newNotes">
+                            @Html.TextAreaFor(model => model.Treatment.TreatmentNotes, new
+                            {
+                                @placeholder = "Legg til behandling",
+                                @class = "form-control textarea",
+                                @spellcheck = "false",
+                                @style = treatmentNotesStyle
+                            })
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.Treatment.OldTreatmentNotes))
+                        {
+                            <div class="tab-pane" id="oldNotes">
+                                @Html.TextAreaFor(model => model.Treatment.OldTreatmentNotes, new
+                                {
+                                    @placeholder = "Tidligere behandlinger",
+                                    @class = "form-control textarea",
+                                    @spellcheck = "false",
+                                    @style = "background-color: white;" + treatmentNotesStyle,
+                                    @readonly = "readonly"
+                                })
+                            </div>
+                        }
+                    </div>
                 </div>
-
-                @*<div class="panel panel-default">
-                    <div class="panel-heading">
-                        @Html.LabelFor(model => model.Treatment.Observations, new { @class = "control-label" })
-                    </div>
-
-                    @Html.TextAreaFor(model => model.Treatment.Observations, new
-                    {
-                        @placeholder = "Legg til Observasjoner",
-                        @spellcheck = "false",
-                        @class = "form-control textarea",
-                        @style = "font-family: Calibri; min-width: 100%; max-height: 102,5px; min-height: 102px;"
-                    })
-                </div>*@
             </div>
         </div>
 
@@ -166,31 +188,89 @@
             <div class="col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        @Html.LabelFor(model => model.Treatment.Anamnesis, new { @class = "control-label" })
+                        <ul class="nav nav-tabs " role="tabpanel" data-tabs="tabs">
+                            <li class="active">
+                                <a class="tab-href" href="#newAnamnese" role="tab" data-toggle="tab">Anamnese</a>
+                            </li>
+                            @if (!string.IsNullOrWhiteSpace(Model.Treatment.OldAnamnesis))
+                            {
+                                <li>
+                                    <a class="tab-href" href="#oldAnamnese" role="tab" data-toggle="tab">Tidligere anamnese</a>
+                                </li>
+                            }
+                        </ul>
                     </div>
 
-                    @Html.TextAreaFor(model => model.Treatment.Anamnesis, new
-                    {
-                        @placeholder = "Legg til Anamnese",
-                        @spellcheck = "false",
-                        @class = "form-control textarea",
-                        @style = "font-family: Calibri; min-width: 100%; max-height: 102px; min-height: 102px;"
-                    })
+                    <div id="my-tab-content" class="tab-content">
+                        <div class="tab-pane active" id="newAnamnese">
+                            @Html.TextAreaFor(model => model.Treatment.Anamnesis, new
+                            {
+                                @placeholder = "Legg til Anamnese",
+                                @spellcheck = "false",
+                                @class = "form-control textarea",
+                                @style = "font-family: Calibri; min-width: 100%; max-height: 102px; min-height: 102px;"
+                            })
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.Treatment.OldAnamnesis))
+                        {
+                            <div class="tab-pane" id="oldAnamnese">
+                                @Html.TextAreaFor(model => model.Treatment.OldAnamnesis, new
+                                {
+                                    @placeholder = "Tidligere anamnese",
+                                    @class = "form-control textarea",
+                                    @spellcheck = "false",
+                                    @style = "background-color: white; font-family: Calibri; min-width: 100%; max-height: 102px; min-height: 102px;",
+                                    @readonly = "readonly"
+                                })
+                            </div>
+                        }
+                    </div>
+
+                    
                 </div>
             </div>
             <div class="col-md-7">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        @Html.LabelFor(model => model.Treatment.Observations, new { @class = "control-label" })
+                        <ul class="nav nav-tabs " role="tabpanel" data-tabs="tabs">
+                            <li class="active">
+                                <a class="tab-href" href="#newObservations" role="tab" data-toggle="tab">Observasjoner</a>
+                            </li>
+                            @if (!string.IsNullOrWhiteSpace(Model.Treatment.OldObservations))
+                            {
+                                <li>
+                                    <a class="tab-href" href="#oldObservations" role="tab" data-toggle="tab">Tidligere observasjoner</a>
+                                </li>
+                            }
+                        </ul>
                     </div>
 
-                    @Html.TextAreaFor(model => model.Treatment.Observations, new
-                    {
-                        @placeholder = "Legg til Observasjoner",
-                        @spellcheck = "false",
-                        @class = "form-control textarea",
-                        @style = "font-family: Calibri; min-width: 100%; max-height: 102px; min-height: 102px;"
-                    })
+                    <div id="my-tab-content" class="tab-content">
+                        <div class="tab-pane active" id="newObservations">
+                            @Html.TextAreaFor(model => model.Treatment.Observations, new
+                            {
+                                @placeholder = "Legg til Observasjoner",
+                                @spellcheck = "false",
+                                @class = "form-control textarea",
+                                @style = "font-family: Calibri; min-width: 100%; max-height: 102px; min-height: 102px;"
+                            })
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(Model.Treatment.OldObservations))
+                        {
+                            <div class="tab-pane" id="oldObservations">
+                                @Html.TextAreaFor(model => model.Treatment.OldObservations, new
+                                {
+                                    @placeholder = "Tidligere observasjoner",
+                                    @class = "form-control textarea",
+                                    @spellcheck = "false",
+                                    @style = "background-color: white; font-family: Calibri; min-width: 100%; max-height: 102px; min-height: 102px;",
+                                    @readonly = "readonly"
+                                })
+                            </div>
+                        }
+                    </div>
+
+                    
                 </div>
             </div>
         </div>

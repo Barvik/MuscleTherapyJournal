@@ -42,11 +42,17 @@ namespace MuscleTherapyJournal.Controllers
             _logger.DebugFormat("Enter TreatmentController with behandingId: {0}", treatmentId);
             var model = new TreatmentViewModel();
 
+            var currentCustomerId = customerId;
+
             if (treatmentId > 0)
             {
                 var treatment = _treatmentService.GetTreatmentById(treatmentId);
                 treatment.Customer = _customerService.GetCustomer(treatment.CustomerId);
 
+                if (currentCustomerId <= 0)
+                {
+                    currentCustomerId = treatment.CustomerId;
+                }
                 //var oldAfflicaitons = _customerService.GetOldAfflicationsByCustomerId(treatment.CustomerId);
                 var oldAfflicaitons = _areaAfflicationService.GetAfflicationAreasByCustomerId(treatment.CustomerId);
                 oldAfflicaitons.RemoveAll(x => x.TreatmentId == treatmentId);
@@ -81,6 +87,7 @@ namespace MuscleTherapyJournal.Controllers
                     //var oldAfflicaitons = _customerService.GetOldAfflicationsByCustomerId(customerId);
                     var oldAfflicaitons = _areaAfflicationService.GetAfflicationAreasByCustomerId(customerId);
 
+                    
                     foreach (var oldAfflicaiton in oldAfflicaitons)
                     {
                         oldAfflicaiton.IsPersisted = true;
@@ -102,7 +109,14 @@ namespace MuscleTherapyJournal.Controllers
                 age--;
             }
             model.Treatment.Customer.Age = age;
-            
+
+            var oldNotes = _treatmentService.GetOldTreatmentNotesByCustomerId(currentCustomerId, treatmentId);
+            if (oldNotes != null)
+            {
+                model.Treatment.OldTreatmentNotes = oldNotes.OldNotes;
+                model.Treatment.OldObservations = oldNotes.OldObservations;
+                model.Treatment.OldAnamnesis = oldNotes.OldAnamnese;
+            }
 
             return View(model);
         }

@@ -9,6 +9,6 @@ namespace MuscleTherapyJournal.Core.Services.Interfaces
         int SaveTreatment(Treatment treatment, bool newTreatment);
         Treatment GetTreatmentById(int treatmentId);
         List<TreatmentCustomer> GetTreatmentsBySearchCriteria(SearchParameters searchParameters);
-        
+        OldTreatmentNotes GetOldTreatmentNotesByCustomerId(int customerId, int treatmentId);
     }
 }

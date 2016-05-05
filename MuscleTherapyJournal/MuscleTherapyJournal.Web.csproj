@@ -352,6 +352,7 @@
     <Content Include="Views\Search\_ResultCustomerSearch.cshtml" />
     <Content Include="Views\Search\_ResultTreatmentSearch.cshtml" />
     <Content Include="Views\Search\_ChooseSearchType.cshtml" />
+    <Content Include="Views\Shared\_TreatmentBaseLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
