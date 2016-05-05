@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using MuscleTherapyJournal.Domain.Model
 @model MuscleTherapyJournal.Models.TreatmentViewModel
 
 @{
@@ -300,6 +299,7 @@
     var imgs = null;
     var drawnCrosses = [];
     var removedCrosses = [];
+    var deletedCrosses = [];
     var leftButtonClick, rightButtonClick;
     leftButtonClick = 0;
     rightButtonClick = 2;
@@ -314,13 +314,14 @@
         $('#treatmentModal').modal('show');
 
         var afflication = JSON.stringify(drawnCrosses);
+        var deleteAfflication = JSON.stringify(deletedCrosses);
         //var observations = JSON.stringify($("#Treatment_Observations").val().split('\n'));
         //var anamnesis = JSON.stringify($("#Treatment_Anamnesis").val().split('\n'));
         var observations = $("#Treatment_Observations");
         var anamnesis = $("#Treatment_Anamnesis");
         var treatmentNotes = $("#Treatment_TreatmentNotes");
 
-        console.log(treatmentNotes);
+        console.log(deleteAfflication);
 
         var observationsAsJson = JSON.stringify(observations.val().substr(0, observations.selectionStart).split("\n"));
         var anamnesisAsJson = JSON.stringify(anamnesis.val().substr(0, anamnesis.selectionStart).split("\n"));
@@ -328,13 +329,12 @@
         var treatmentId = $("#Treatment_TreatmentId").val();
         var customerId = $("#Treatment_CustomerId").val();
 
-        console.log(afflication);
-
         $.ajax({
             type: "POST",
             url: "/api/treatment/savetreatment/",
             data: {
                 Afflication: afflication,
+                DeleteAffliction: deleteAfflication,
                 Observations: observationsAsJson,
                 Anamnesis: anamnesisAsJson,
                 TreatmentNotes: treatmentNotesAsJson,
@@ -579,6 +579,7 @@
         if (typeof eraseCross !== 'undefined') {
             drawnCrosses.splice(eraseIndexCross, 1);
             removedCrosses.push(eraseCross);
+            deletedCrosses.push(eraseCross);
 
             reDrawImageWithRemainingCrosses();
         };

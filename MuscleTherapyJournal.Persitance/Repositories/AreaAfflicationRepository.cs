@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using log4net;
 using MuscleTherapyJournal.Persitance.DAO.Interfaces;
@@ -36,6 +37,22 @@ namespace MuscleTherapyJournal.Persitance.DAO
 
                 return result.ToList();
             } 
+        }
+
+        public bool DeleteAfflictions(List<AfflictionAreaEntity> request)
+        {
+            _logger.DebugFormat("DeleteAfflictions with request count: {0}", request.Count);
+
+            using (var db = new MuscleTherapyContext())
+            {
+                foreach (var afflictionAreaEntity in request)
+                {
+                    db.Entry(afflictionAreaEntity).State = EntityState.Deleted;
+                }
+
+                db.SaveChanges();
+            }
+            return true;
         }
     }
 }

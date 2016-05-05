@@ -32,9 +32,19 @@ namespace MuscleTherapyJournal.Controllers.WebApi
         public IHttpActionResult SaveTreatment(SaveTreatmentApiModel model)
         {
             var afflications = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AfflictionArea>>(model.Afflication);
+            var deleteAfflication = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AfflictionArea>>(model.DeleteAffliction);
             var observations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(model.Observations);
             var anamnesis = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(model.Anamnesis);
             var treatmentNotes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(model.TreatmentNotes);
+
+
+            var test = new List<AfflictionArea>();
+            foreach (var afflictionArea in deleteAfflication)
+            {
+                test.Add(afflictionArea);
+                test.Add(afflictionArea);
+            }
+            bool resultA = _areaAfflicationService.DeleteAfflications(test);
 
             var newTreatment = model.TreatmentId == 0;
 
@@ -164,6 +174,7 @@ namespace MuscleTherapyJournal.Controllers.WebApi
     public class SaveTreatmentApiModel
     {
         public string Afflication { get; set; }
+        public string DeleteAffliction { get; set; }
         public string TreatmentNotes { get; set; }
         public string Observations { get; set; }
         public string Anamnesis { get; set; }

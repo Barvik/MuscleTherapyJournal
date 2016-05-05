@@ -7,6 +7,7 @@ namespace MuscleTherapyJournal.Persitance.DAO.Interfaces
     {
         List<AfflictionAreaEntity> GetAfflicationAreas(int treatmentId);
         List<AfflictionAreaEntity> GetAfflicationAreasByCustomerId(int customerId);
+        bool DeleteAfflictions(List<AfflictionAreaEntity> request);
     }
 }
 

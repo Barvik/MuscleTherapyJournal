@@ -38,11 +38,9 @@ namespace MuscleTherapyJournal.Domain.Model
             return
                 string.Format(
                     "TreatmentId: [TreatmentId: {0}, CustomerId: {1}, CreatedDate: {2}, ChangedDate: {3}, UserId:{4}, " +
-                    "Anamnesis: {5}, Observations: {6}, [Customer: {7}], [User: {8}], [AfflictionAreas: {9}]]",
+                    "Anamnesis: {5}, Observations: {6}, [AfflictionAreas: {7}]]",
                     TreatmentId,
-                    CustomerId, CreatedDate, ChangedDate, UserId, Anamnesis, Observations, Customer.ToString(),
-                    User.ToString(),
-                    AfflictionAreas.ToString())
+                    CustomerId, CreatedDate, ChangedDate, UserId, Anamnesis, Observations, AfflictionAreas.ToString())
                 ;
         }
     }

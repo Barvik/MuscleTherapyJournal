@@ -7,5 +7,6 @@ namespace MuscleTherapyJournal.Core.Services.Interfaces
     {
         List<AfflictionArea> GetAfflicationAreasByTreatmentId(int treatmendId);
         List<AfflictionArea> GetAfflicationAreasByCustomerId(int customerId);
+        bool DeleteAfflications(List<AfflictionArea> deleteAfflication);
     }
 }
