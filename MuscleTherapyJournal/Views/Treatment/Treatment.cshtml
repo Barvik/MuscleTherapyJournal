@@ -321,8 +321,6 @@
         var anamnesis = $("#Treatment_Anamnesis");
         var treatmentNotes = $("#Treatment_TreatmentNotes");
 
-        console.log(deleteAfflication);
-
         var observationsAsJson = JSON.stringify(observations.val().substr(0, observations.selectionStart).split("\n"));
         var anamnesisAsJson = JSON.stringify(anamnesis.val().substr(0, anamnesis.selectionStart).split("\n"));
         var treatmentNotesAsJson = JSON.stringify(treatmentNotes.val().substr(0, treatmentNotes.selectionStart).split("\n"));
