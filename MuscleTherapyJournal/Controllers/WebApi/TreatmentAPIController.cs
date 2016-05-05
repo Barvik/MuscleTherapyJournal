@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Web.UI.WebControls;
+using log4net;
 using MuscleTherapyJournal.Core.Services.Interfaces;
 using MuscleTherapyJournal.Domain.Model;
-using MuscleTherapyJournal.Models;
 
 namespace MuscleTherapyJournal.Controllers.WebApi
 {
@@ -15,6 +14,8 @@ namespace MuscleTherapyJournal.Controllers.WebApi
         private readonly ITreatmentService _treatmentService;
         private readonly ICustomerService _customerService;
         private readonly IAreaAfflicationService _areaAfflicationService;
+
+        private readonly ILog _logger = LogManager.GetLogger(typeof(TreatmentApiController));
 
         public TreatmentApiController(ITreatmentService treatmentService, ICustomerService customerService, IAreaAfflicationService areaAfflicationService)
         {
@@ -37,14 +38,11 @@ namespace MuscleTherapyJournal.Controllers.WebApi
             var anamnesis = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(model.Anamnesis);
             var treatmentNotes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(model.TreatmentNotes);
 
-
-            var test = new List<AfflictionArea>();
-            foreach (var afflictionArea in deleteAfflication)
+            bool deleteAfflictionResult = _areaAfflicationService.DeleteAfflications(deleteAfflication);
+            if (!deleteAfflictionResult)
             {
-                test.Add(afflictionArea);
-                test.Add(afflictionArea);
+                _logger.ErrorFormat("Unable to delete afflictions");
             }
-            bool resultA = _areaAfflicationService.DeleteAfflications(test);
 
             var newTreatment = model.TreatmentId == 0;
 

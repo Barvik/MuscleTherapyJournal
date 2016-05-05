@@ -9,7 +9,7 @@ namespace MuscleTherapyJournal.Persitance.DAO
 {
     public class AreaAfflicationRepository : IAreaAfflicationRepository
     {
-        private readonly ILog _logger = LogManager.GetLogger(typeof(TreatmentRepository));
+        private readonly ILog _logger = LogManager.GetLogger(typeof(AreaAfflicationRepository));
 
         public List<AfflictionAreaEntity> GetAfflicationAreas(int treatmentId)
         {
